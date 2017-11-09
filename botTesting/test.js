@@ -1,3 +1,4 @@
+'use strict'
 console.log("appserver started");
 var appserver = require('../src/webapp/app')
 // callTest

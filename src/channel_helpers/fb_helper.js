@@ -1,3 +1,5 @@
+'use strict'
+var request = require("request")
 var appConf = require('../../conf/appconf')
 function parseIncomingMessage(req) {
     console.log('start of parsing incoming request', JSON.stringify(req.body))
@@ -50,18 +52,19 @@ function parseIncomingMessage(req) {
 }
 
 function sendFBMessage(messageData) {
-    console.log('start of sendFBMessage')
+    console.log('start of sendFBMessage',messageData)
     let user, organization, response, messageArray, valueContext
     user = messageData.user
     organization = messageData.organization
     response = messageData.response
+    
     messageArray = typeof (response) === 'string' ? [{
         'text': response
     }] : response
     valueContext = {
         'messageData': messageData
     }
-
+    console.log(response,messageArray)
     messageArray.forEach(function (message) {
         request({
             url: appConf.fbUrl,
@@ -79,7 +82,7 @@ function sendFBMessage(messageData) {
             if (error) {
                 console.error(valueContext, 'Error while sending FB message request', error)
             } else {
-                console.log(valueContext, "Successfully sent message '%s' to user", JSON.stringify(message))
+                console.log(valueContext, body,"Successfully sent message '%s' to user", JSON.stringify(message))
             }
         })
     })

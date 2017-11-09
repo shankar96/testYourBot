@@ -1,3 +1,4 @@
+'use strict'
 var channelHandler = require('../channel_helpers/channel_handler')
 function processMessage(valueContext){
     console.log("in processMessage")
