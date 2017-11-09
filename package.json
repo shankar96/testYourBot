@@ -1,0 +1,22 @@
+{
+  "name": "botTest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node botTesting/test.js",
+    "start": "node src/webapp/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "nock": "^9.1.0",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "mockserver-grunt": "^1.0.42"
+  }
+}
