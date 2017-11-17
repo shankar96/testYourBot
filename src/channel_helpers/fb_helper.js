@@ -1,8 +1,9 @@
 'use strict'
-var request = require("request")
+var request = require('request')
 var appConf = require('../../conf/appconf')
+var log = require('../utils/logger')
 function parseIncomingMessage(req) {
-    console.log('start of parsing incoming request', JSON.stringify(req.body))
+    log.info('start of parsing incoming request', JSON.stringify(req.body))
     try {
         let data, valueContext
         data = JSON.parse(JSON.stringify(req.body))
@@ -38,7 +39,7 @@ function parseIncomingMessage(req) {
                                 'messageData': messageData,
                                 'appId': req.params['appId']
                             }
-                            console.log(valueContextElem, text, sender)
+                            log.info(valueContextElem, text, sender)
                             valueContext.push(valueContextElem)
                         }
                     })
@@ -47,24 +48,24 @@ function parseIncomingMessage(req) {
         }
         return valueContext
     } catch (err) {
-        console.error('error while parsing incoming request', err)
+        log.error('error while parsing incoming request', err)
     }
 }
 
 function sendFBMessage(messageData) {
-    console.log('start of sendFBMessage',messageData)
+    log.info('start of sendFBMessage', messageData)
     let user, organization, response, messageArray, valueContext
     user = messageData.user
     organization = messageData.organization
     response = messageData.response
-    
+
     messageArray = typeof (response) === 'string' ? [{
         'text': response
     }] : response
     valueContext = {
         'messageData': messageData
     }
-    console.log(response,messageArray)
+    // log.info(response, messageArray)
     messageArray.forEach(function (message) {
         request({
             url: appConf.fbUrl,
@@ -80,9 +81,9 @@ function sendFBMessage(messageData) {
             }
         }, (error, response, body) => {
             if (error) {
-                console.error(valueContext, 'Error while sending FB message request', error)
+                log.error(valueContext, 'Error while sending FB message request', error)
             } else {
-                console.log(valueContext, body,"Successfully sent message '%s' to user", JSON.stringify(message))
+                log.info(valueContext, body, "Successfully sent message '%s' to user", JSON.stringify(message))
             }
         })
     })

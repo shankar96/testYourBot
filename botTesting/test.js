@@ -1,8 +1,9 @@
 'use strict'
-console.log("appserver started");
+var log = require('./utils/logger')
+log.info("appserver started");
 var appserver = require('../src/webapp/app')
 // callTest
-console.log("fbTest")
-var fbTest = require('./fb_test/fbTest');
+log.info("fbTest")
 
 var fbServer = require('./fb_mock_server/fbServer')
+var fbTest = require('./fb_test/fbTest');

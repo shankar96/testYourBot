@@ -1,11 +1,33 @@
 'use strict'
+var log = require('../utils/logger')
 var channelHandler = require('../channel_helpers/channel_handler')
-function processMessage(valueContext){
-    console.log("in processMessage")
-    valueContext.messageData.response = 'bot:- '+valueContext.messageData.query;
-    channelHandler.sendMessage(valueContext);
+var nlpHandler = require('../nlp_helpers/nlp_handler')
+function processMessage(valueContext) {
+    log.info("in processMessage")
+    // console.log(valueContext)
+    if (valueContext.messageData.query == 'multiple_message') {
+        valueContext.messageData.response=[
+            {
+                "text":"message1"
+            },{
+                "text":"message2"
+            }
+        ];
+        channelHandler.sendMessage(valueContext);
+    } else {
+        valueContext.messageData.response = "bot:-" + valueContext.messageData.query;
+        channelHandler.sendMessage(valueContext);
+    }
+    // nlpHandler.sendToDialogFlow(valueContext)
+    // .then(channelHandler.sendMessage)
+    // .catch((err)=>{
+    //     log.info("Error in Nlp",err);
+    //     valueContext.messageData.response = "Error in Processing Your Request :- "+valueContext.messageData.query
+    //     channelHandler.sendMessage(valueContext)
+    // })
+
 }
 
-module.exports={
+module.exports = {
     processMessage
 }

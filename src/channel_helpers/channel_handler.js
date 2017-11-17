@@ -1,12 +1,13 @@
 'use strict'
+var log = require('../utils/logger')
 var fbHelper = require('./fb_helper')
 function sendMessage(valueContext) {
-    console.log("in sendMessage")
+    log.info("in sendMessage")
     if (valueContext.messageData.channel == 'facebook'){
         fbHelper.sendFBMessage(valueContext.messageData);
     }
     else{
-        console.log("No such channel",valueContext.messageData.channel);
+        log.info("No such channel",valueContext.messageData.channel);
     }
 }
 module.exports = {

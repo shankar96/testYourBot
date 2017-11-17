@@ -1,5 +1,6 @@
 'use strict'
 var fbHelper = require('../../channel_helpers/fb_helper')
+var log = require('../../utils/logger')
 var processMessage = require('../../message_processor/process_message').processMessage
 function home(req, res, next) {
     res.status(200).json({
@@ -14,13 +15,13 @@ function home(req, res, next) {
   
  */
 function fbGet(req, res) {
-    console.log('in fbGet-->',req.params,req.body,req.query);
-    if(req.query && req.query['hub.challenge']){
+    log.info('in fbGet-->', req.params, req.body, req.query);
+    if (req.query && req.query['hub.challenge']) {
         res.send(req.query['hub.challenge'])
     }
-        else{
-            res.send(400)
-        }
+    else {
+        res.send(400)
+    }
 };
 /**
 
@@ -61,9 +62,9 @@ function fbGet(req, res) {
     }
   ]
 }
- */ 
+ */
 function fbPost(req, res) {
-    console.log('in fbPost-->', req.params,req.body,req.query);
+    log.info('in fbPost-->', req.params, req.body, req.query,req.rawBody);
     try {
         var valueContexts = fbHelper.parseIncomingMessage(req);
         if (valueContexts && valueContexts.length > 0) {
@@ -75,7 +76,7 @@ function fbPost(req, res) {
             status: "ok"
         });
     } catch (err) {
-        console.error({ err: err }, "error in handling request");
+        log.error({ err: err }, "error in handling request");
         return res.status(400).json({
             status: "error",
             error: err

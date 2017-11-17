@@ -1,11 +1,11 @@
 {
-  "name": "botTest",
+  "name": "botTesting",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "botTesting/node_modules/.bin/mocha test.js",
-    "start": "node src/webapp/app.js"
+    "test": "node_modules/.bin/mocha test.js",
+    "start": "node webapp/app.js"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,12 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "chai": "^4.1.2",
     "express": "^4.16.2",
-    "request": "^2.83.0"
+    "mocha": "^4.0.1",
+    "nock": "^9.1.0",
+    "request": "^2.83.0",
+    "socket.io": "^2.0.4",
+    "vhost": "^3.0.2"
   }
 }
