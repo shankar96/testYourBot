@@ -1,7 +1,7 @@
 module.exports = {
     info: function () {
         for (key in arguments) {
-            console.log(arguments[key])
+            // console.log(arguments[key])
         }
     },
     error: function () {

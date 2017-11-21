@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha test.js",
-    "start": "node webapp/app.js"
+    "start": "node webapp/app.js",
+    "cliFb": "node ./fb_test/cli.js"
   },
   "keywords": [],
   "author": "",

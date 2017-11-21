@@ -1,7 +1,7 @@
 'use strict'
 var log = require('./utils/logger')
 log.info("appserver started");
-var appserver = require('../src/webapp/app')
+var appserver = require('../src/webapp/app');// to start app server
 // callTest
 log.info("fbTest")
 

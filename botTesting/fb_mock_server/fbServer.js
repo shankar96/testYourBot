@@ -9,69 +9,70 @@ var serverEmitter = require('../event_handler/eventHandler')
 
 log.info('Mocking FB server')
 
-function nockServer() {}
-    //receive messages from webhooks
-    var scope = nock('https://graph.facebook.com/')
-        .filteringRequestBody(function(body){
-            body = JSON.parse(body);
-            console.log("body",body,body.recipient)
-             serverEmitter.emit('webhookMessage',body); 
-            scope.done()
-            nock.cleanAll()
-            return '*';
-        })
-        .post('/v2.6/me/messages')
-        .reply(200)
-        .log(console.log);
+function nockServer() { }
+//receive messages from webhooks
+var scope = nock('https://graph.facebook.com/')
+    .persist()
+    .filteringRequestBody(function (body) {
+        body = JSON.parse(body);
+        // console.log("body",body,body.recipient)
+        serverEmitter.emit('webhookMessage', body);
+        // console.log(scope) 
+        // // scope.intercept
+        // // scope.done()
+        // nock.cleanAll()
+        return '*';
+    })
+    .post('/v2.6/me/messages')
+    .reply(200)
+// .log(console.log);
 // }
 // nock.recorder.rec();
-function handleError(){
-    console.log('uncaughtException',arguments)
+function handleError() {
+    console.log('uncaughtException', arguments)
 }
-nock.emitter.on('no match', function(req) {
-    console.log('no match');
-});
-process.on('uncaughtException',handleError)   
-process.on('unhandledRejection',handleError)
+process.on('uncaughtException', handleError)
+process.on('unhandledRejection', handleError)
 var queueMessages = {
 
 }
 var timerIds = {
 
 }
-setInterval(()=>{
-    log.info("\nIn ", queueMessages,nock.pendingMocks())
-},1000)
-serverEmitter.on('webhookMessage',messageFromWebhook)
+setInterval(() => {
+    if (nock.pendingMocks().length > 0){
+        // log.info("\nIn ", queueMessages, nock.pendingMocks());
+        // nock.cleanAll();
+    }
+}, 1000)
+serverEmitter.on('webhookMessage', messageFromWebhook)
 function triggerMessageEvent(eventName) {
     let senderId = eventName.split('_')[1];
     let body = queueMessages[senderId]
     clearTimeout(timerIds[senderId]);
-    // timerIds[senderId] = 
-    setTimeout(() => {
-       serverEmitter.emit(eventName, body);
-       delete queueMessages[senderId];
-       delete timerIds[senderId]
+    timerIds[senderId] = setTimeout(() => {
+        serverEmitter.emit(eventName, body);
+        delete queueMessages[senderId];
+        delete timerIds[senderId]
     }, 100)
-    log.info("In trigger", queueMessages[senderId],nock.pendingMocks())
-    
+    // log.info("In trigger", queueMessages[senderId],nock.pendingMocks())
+
 }
-serverEmitter.on('triggerMessageEvent',triggerMessageEvent)
+serverEmitter.on('triggerMessageEvent', triggerMessageEvent)
 function messageFromWebhook(body) {
     //deliver to client using eventEmitter
-    log.info('in messageFromWebhook', body)
+    // log.info('in messageFromWebhook', body)
     let senderId = body.recipient.id;
     let eventName = 'fbMessage_' + senderId;
     // log.info("in fbServer Emitting event "+eventName);
     queueMessages[senderId].push(body)
-    
-    serverEmitter.emit('triggerMessageEvent',eventName)
-    console.log("queMessages", queueMessages, new Date().getTime())
+
+    serverEmitter.emit('triggerMessageEvent', eventName)
+    // console.log("queMessages", queueMessages, new Date().getTime())
 }
 
 serverEmitter.on('userMessage', messageFromUser)
 function messageFromUser(body) {
-    nockServer()
     let senderId = body.senderId;
     queueMessages[senderId] = [];
     // log.info('\tin fbServer emitted event userMessage', body);
@@ -95,9 +96,9 @@ function messageFromUser(body) {
  
  */
 
-function sendMessageToWebhook(structuredMessage) {
+function sendMessageToWebhook(structuredMessage,appId) {
     let options = {
-        url: webhookUrl,
+        url: webhookUrl.replace(':appId',appId),
         method: "POST",
         headers: {
             'x-hub-signature': ""
@@ -126,7 +127,7 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].timestamp = new Date().getTime()
         structuredMessage.entry[0].messaging[0].postback.payload = msg.text
         structuredMessage.entry[0].messaging[0].postback.title = "Payload Title"
-        sendMessageToWebhook(structuredMessage);
+        sendMessageToWebhook(structuredMessage,msg.appId);
     } else if (msg.type == "quick_replies") {
         structuredMessage = messageFormat.quickReplyMessage
 
@@ -137,7 +138,7 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].timestamp = new Date().getTime()
         structuredMessage.entry[0].messaging[0].message.text = "Quick Replies Title"
         structuredMessage.entry[0].messaging[0].message.quick_reply.payload = msg.text
-        sendMessageToWebhook(structuredMessage);
+        sendMessageToWebhook(structuredMessage,msg.appId);
     } else if (msg.type == "text") {
         structuredMessage = messageFormat.textMessage
 
@@ -147,8 +148,10 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].sender.id = msg.senderId
         structuredMessage.entry[0].messaging[0].timestamp = new Date().getTime()
         structuredMessage.entry[0].messaging[0].message.text = msg.text
-        sendMessageToWebhook(structuredMessage);
+        sendMessageToWebhook(structuredMessage,msg.appId);
     } else {
-        log.info("Invalid Message from fbClient")
+        log.info("Invalid Message from fbClient");
+        let eventName ='fbMessage_' + msg.senderId;
+        serverEmitter.emit(eventName, {"err":"Invalid Message from fbClient"});
     }
 }
