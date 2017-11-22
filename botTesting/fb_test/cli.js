@@ -42,18 +42,24 @@ var colors = {
     BgCyan: "\x1b[46m",
     BgWhite: "\x1b[47m",
 }
-// function keyPressSimulate() {
-//     process.stdin.on('keypress', (str, key) => {
-//         if (key.ctrl && key.name === 'c') {
-//             process.exit();
-//         } else {
-//             coloredText(`You pressed the "${str}" key`);
-//             coloredText();
-//             coloredText(key);
-//             coloredText();
-//         }
-//     });
-// }
+function keyPressSimulate() {
+    process.stdin.on('keypress', (str, key) => {
+        if (key.ctrl && key.name === 'c') {
+            coloredText('Process interrupeted..', colors.FgRed)
+        }
+        // else {
+        //     coloredText(`You pressed the "${str}" key`);
+        //     coloredText();
+        //     coloredText(key);
+        //     coloredText();
+        // }
+    });
+}
+keyPressSimulate()
+// process.on('SIGINT', function() {
+//     coloredText('Caught interrupt signal',colors.FgRed);
+//     process.exit();
+// });
 
 function clear() {
     process.stdout.write('\x1Bc');
@@ -83,29 +89,38 @@ function addMessages(flowId, senderId, pageId, appId) {
             if (answer.toLowerCase().indexOf('exit') > -1 || answer.toLowerCase().indexOf('done') > -1) {
                 resolve(answer)
             } else {
-                let text, type, clientMessageFormat;
-                [type, text] = answer.trim().split(":");
-                type = type.toLowerCase().trim();
-                text = text.trim();
-                clientMessageFormat = {
-                    type,
-                    text,
-                    senderId,
-                    pageId,
-                    appId,
-                }
-                if (text.length > 0 && (type.indexOf('text') > -1 || type.indexOf('postback') > -1 || type.indexOf('quick_replies') > -1)) {
-                    fbClient.sendMessageToFbServer(clientMessageFormat, function (response) {
-                        coloredText("Response from Facebook after processed by Bot", colors.FgYellow)
-                        coloredText(response, colors.FgBlue);
-                        generateTestData.addToActiveFlowById(flowId, { query: { type, text }, response })
+                try {
+                    let text, type, clientMessageFormat;
+                    [type, text] = answer.trim().split(":");
+                    type = type.toLowerCase().trim();
+                    text = text.trim();
+                    clientMessageFormat = {
+                        type,
+                        text,
+                        senderId,
+                        pageId,
+                        appId,
+                    }
+                    if (text.length > 0 && (type.indexOf('text') > -1 || type.indexOf('postback') > -1 || type.indexOf('quick_replies') > -1)) {
+                        fbClient.sendMessageToFbServer(clientMessageFormat, function (response) {
+                            coloredText("Response from Facebook after processed by Bot", colors.FgYellow)
+                            coloredText(response, colors.FgBlue);
+                            generateTestData.addToActiveFlowById(flowId, { query: { type, text }, response })
+                            addMessages(flowId, senderId, pageId, appId)
+                                .then((status) => {
+                                    resolve(status)
+                                })
+                        })
+                    } else {
+                        coloredText(clientMessageFormat, colors.FgRed)
+                        coloredText("\tXXXXXX unstructured message XXXXXX", colors.FgRed);
                         addMessages(flowId, senderId, pageId, appId)
                             .then((status) => {
                                 resolve(status)
                             })
-                    })
-                } else {
-                    coloredText(clientMessageFormat, colors.FgRed)
+                    }
+                } catch (err) {
+                    coloredText(err, colors.FgRed)
                     coloredText("\tXXXXXX unstructured message XXXXXX", colors.FgRed);
                     addMessages(flowId, senderId, pageId, appId)
                         .then((status) => {
@@ -169,7 +184,7 @@ function getUpdateParams(params) {
                             readRequiredData("Enter " + keyWords[index], colors.FgCyan, function (answer) {
                                 keyPair[keyWords[index]] = answer;
                                 resolve();
-                                if (index+1 == keyWords.length) {
+                                if (index + 1 == keyWords.length) {
                                     resolveAll(keyPair);
                                 }
                             })
@@ -177,7 +192,7 @@ function getUpdateParams(params) {
 
                     })
                 })
-            },Promise.resolve())
+            }, Promise.resolve())
         } else {
             rejectAll({ success: false, message: "Length mismatch of entered params..." })
         }
@@ -196,7 +211,7 @@ function updateFlowInfoById(flowId) {
                     .then((keyPair) => {
                         coloredText("new Flow info for flowId <" + flowId + ">", colors.FgCyan)
                         coloredText(keyPair, colors.FgYellow)
-                        readRequiredData("\nconfirm to updateFlowInfoById? <y/n>", colors.FgBlue, function (consfirm) {
+                        readRequiredData("\nconfirm to updateFlowInfoById? <y/n>", colors.FgBlue, function (confirm) {
                             if (confirm.toLowerCase().indexOf('y') > -1 || confirm.toLowerCase().indexOf('yes') > -1) {
                                 generateTestData.updateKeyPairById(flowId, keyPair)
                                     .then((resp) => {
@@ -240,13 +255,18 @@ function saveViewFlowById(flowId) {
             updateFlowInfoById(flowId)
                 .then((resp) => {
                     coloredText(resp, colors.FgYellow);
-                    saveViewFlowById(flowId)
+                    if (resp.oldFlowId == resp.newFlowId) {
+                        saveViewFlowById(resp.newFlowId)
+                    } else {
+                        coloredText("your older flowId is <" + resp.oldFlowId + "> and newer flowId is <" + resp.newFlowId + ">\n NOTE: remember older Id to do action or delete it later after this..", colors.FgBlue);
+                        saveViewFlowById(resp.newFlowId)
+                    }
                 }).catch((err) => {
                     coloredText(err, colors.FgRed)
                     saveViewFlowById(flowId)
                 })
         } else if (answer.toLowerCase().indexOf('discard') > -1) {
-            generateTestData.deleteFlowById(flowId)
+            generateTestData.deleteFlowById(flowId, 'fromCache')
                 .then((resp) => {
                     coloredText(resp, colors.FgCyan)
                     initiate()
@@ -376,7 +396,12 @@ function startClI() {
                 updateFlowInfoById(flowId)
                     .then((resp) => {
                         coloredText(resp, colors.FgYellow);
-                        saveViewFlowById(flowId)
+                        if (resp.oldFlowId == resp.newFlowId) {
+                            saveViewFlowById(resp.newFlowId)
+                        } else {
+                            coloredText("your olderFlowId " + resp.oldFlowId + " and newer is" + resp.newFlowId + "\n note down Older Id to do action over it later", colors.FgYellow);
+                            saveViewFlowById(resp.newFlowId)
+                        }
                     }).catch((err) => {
                         coloredText(err, colors.FgRed)
                         saveViewFlowById(flowId)
@@ -387,13 +412,13 @@ function startClI() {
             coloredText("__________________deleteFlowById...__________________\t" + answer, colors.FgBlue)
             readRequiredData("\tEnter flowId whose info you want to delete", colors.FgCyan, function (answer) {
                 let flowId = answer.trim();
-                deleteFlowById(flowId)
+                generateTestData.deleteFlowById(flowId)
                     .then((resp) => {
                         coloredText(resp, colors.FgYellow);
-                        saveViewFlowById(flowId)
+                        startClI()
                     }).catch((err) => {
                         coloredText(err, colors.FgRed)
-                        saveViewFlowById(flowId)
+                        startClI()
                     })
             })
         } else if (answer.toLowerCase().indexOf('exit') > -1 || answer.toLowerCase().indexOf('0') > -1) {

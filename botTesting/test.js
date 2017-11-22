@@ -7,3 +7,4 @@ log.info("fbTest")
 
 var fbServer = require('./fb_mock_server/fbServer')
 var fbTest = require('./fb_test/fbTest');
+fbTest.checkFlowsFromFbTestData();

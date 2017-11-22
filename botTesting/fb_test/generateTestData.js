@@ -1,11 +1,11 @@
 var Promise = require('bluebird');
-var fs = require('fs');
-var path = require('path')
 var testUtils = require('../utils/testUtils')
+var log = require('../utils/logger')
 var activeFlow = {}
 var activeTestSuite = {}
-let filename = path.join(__dirname.replace('/fb_test', ''), 'test_data/fbTestData.json');
-console.log("FbTest Data filename ", filename)
+let fbTestDataFile = require('./fbTestConf').getFbTestDataFile()
+log.info("setting fbTestDataFile => ",fbTestDataFile)
+console.log("FbTest Data filename ", fbTestDataFile)
 var sampleTestData = {
     "testData": {
         "flows": {
@@ -66,7 +66,7 @@ function addToActiveFlowById(flowId, data) {
 function saveActiveFlowById(flowId) {
     return new Promise((resolve, reject) => {
 
-        testUtils.readTestFile(filename)
+        testUtils.readTestFile(fbTestDataFile)
             .then((data) => {
                 data = JSON.parse(data);
                 if (!data.testData) {
@@ -78,16 +78,16 @@ function saveActiveFlowById(flowId) {
                 activeFlow[flowId].savedTime = "Date:-" + new Date() + "  Timestamp:- " + new Date().getTime();
                 data.testData.flows[flowId] = activeFlow[flowId];
                 // console.log(data, JSON.stringify(data))
-                testUtils.writeTestFile(filename, JSON.stringify(data, null, '\t'))
+                testUtils.writeTestFile(fbTestDataFile, JSON.stringify(data, null, '\t'))
                     .then((resp) => {
                         delete activeFlow[flowId];// remove from activeFlow
-                        resolve({success:true,resp,message:"successfully saved in file.."})
+                        resolve({ success: true, resp, message: "successfully saved in file.." })
                     }).catch((err) => {
-                        reject({success:false,err,message:"Error in writeTestFile in saveActiveFlowById.."})
+                        reject({ success: false, err, message: "Error in writeTestFile in saveActiveFlowById.." })
                     })
 
             }).catch((err) => {
-                reject({success:true,err,message:"Error in readTestFile in saveActiveFlowById.."})
+                reject({ success: true, err, message: "Error in readTestFile in saveActiveFlowById.." })
             })
     })
 }
@@ -128,8 +128,8 @@ function createNewFlow(flowInfo) {
                 flow: []
             }
             flowInfo = activeFlow[flowId];
-            
-            resolve({ success: true, flowInfo, message:"successfully created and initialized new Flow"})
+
+            resolve({ success: true, flowInfo, message: "successfully created and initialized new Flow" })
         }
     })
 }
@@ -149,9 +149,10 @@ function updateKeyPairById(flowId, keyPair) {
     return new Promise((resolve, reject) => {
         if (activeFlow[flowId]) {
             let updatedPair = [];
+            let oldFlowId = flowId;
             if (Object.keys(keyPair).indexOf('flowId') > -1) {
                 let data = activeFlow[flowId];
-                delete activeFlow[flowId];//delete old FlowId and data
+                // delete activeFlow[flowId];//delete old FlowId and data
                 activeFlow[keyPair['flowId']] = data;
                 activeFlow[keyPair['flowId']]['flowId'] = keyPair['flowId'];
                 updatedPair.push('flowId changed from ' + flowId + " to " + keyPair['flowId']);
@@ -165,23 +166,31 @@ function updateKeyPairById(flowId, keyPair) {
 
                 }
             }
-            resolve({ success: "true", updatedPair, message: "updated in cache.." })
+            let newFlowId = keyPair['flowId'] ? keyPair['flowId'] : flowId;
+            console.log("cache file....", activeFlow)
+            resolve({ success: "true", updatedPair, message: "updated in cache..", oldFlowId, newFlowId })
         } else {
-            //later fetch from file
-            testUtils.readTestFile(filename)
+            //loading flowId in Cache
+            testUtils.readTestFile(fbTestDataFile)
                 .then((data) => {
                     data = JSON.parse(data);
                     if (data.testData && data.testData.flows) {
                         activeFlow[flowId] = data.testData.flows[flowId];
-                        updateKeyPairById(flowId, keyPair)
-                            .then((resp) => {
-                                resp.message = "Reading from file and saved in cache. " + resp.message;
-                                resolve(resp)
-                            }).catch((err) => {
-                                reject(err);
-                            })
+                        console.log("reading file....",flowId, activeFlow, data)
+                        if (activeFlow[flowId]) {
+                            updateKeyPairById(flowId, keyPair)
+                                .then((resp) => {
+                                    console.log("done file....", activeFlow)
+                                    resp.message = "Reading from file and saved in cache. " + resp.message;
+                                    resolve(resp)
+                                }).catch((err) => {
+                                    reject(err);
+                                })
+                        } else {
+                            reject({ success: false, message: "flowId is not found in testData file" })
+                        }
                     } else {
-                        reject({ success: false, message: "unstructured testData in file" })
+                        reject({ success: false, message: "unstructured data in testData file" })
                     }
                 }).catch((err) => {
                     reject({ success: false, err, message: "Error in readTestFile in updateKeyPairById" })
@@ -190,20 +199,21 @@ function updateKeyPairById(flowId, keyPair) {
         }
     })
 }
-function deleteFlowById(flowId) {
+function deleteFlowById(flowId,from) {
     return new Promise((resolve, reject) => {
-        if (activeFlow[flowId]) {
+        if (activeFlow[flowId] && from == 'fromCache') {
             delete activeFlow[flowId];
             resolve({ success: true, message: "removed from activeFlow.." });
         } else {
-            testUtils.readTestFile(filename)
+            testUtils.readTestFile(fbTestDataFile)
                 .then((data) => {
                     data = JSON.parse(data)
                     if (data.testData && data.testData.flows) {
                         delete data.testData.flows[flowId]
-                        testUtils.writeTestFile(filename, JSON.stringify(data, null, '\t'))
+                        testUtils.writeTestFile(fbTestDataFile, JSON.stringify(data, null, '\t'))
                             .then((resp) => {
-                                resolve({ success: true, message: "removed from file...", resp })
+                                delete activeFlow[flowId];
+                                resolve({ success: true, message: "removed from file and cache..", resp })
                             }).catch((err) => {
                                 reject({ success: false, err, message: "Error in deleteFlowById" })
                             })
@@ -222,7 +232,7 @@ function viewFlowById(flowId) {
         if (flow) {
             resolve({ success: true, flow, message: "viewing from activeFlow" })
         } else {
-            testUtils.readTestFile(filename)
+            testUtils.readTestFile(fbTestDataFile)
                 .then((data) => {
                     data = JSON.parse(data);
                     if (data.testData && data.testData.flows) {
@@ -239,7 +249,7 @@ function viewFlowById(flowId) {
 }
 function viewAllFlowId() {
     return new Promise((resolve, reject) => {
-        testUtils.readTestFile(filename)
+        testUtils.readTestFile(fbTestDataFile)
             .then((data) => {
                 let flowIds1 = [], flowIds2 = []
                 data = JSON.parse(data)

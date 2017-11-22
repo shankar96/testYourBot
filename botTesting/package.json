@@ -2,24 +2,24 @@
   "name": "botTesting",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "test.js",
   "scripts": {
     "test": "node_modules/.bin/mocha test.js",
     "start": "node webapp/app.js",
     "cliFb": "node ./fb_test/cli.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["Facebook Bot","BotTesting","Mocha","chai","sockets","nock"],
+  "author": "shankar kumar chaudhary <shankarkumarchaudhary96@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
     "mocha": "^4.0.1",
     "nock": "^9.1.0",
     "request": "^2.83.0",
-    "socket.io": "^2.0.4",
-    "vhost": "^3.0.2"
+    "socket.io": "^2.0.4"
   }
 }

@@ -51,6 +51,7 @@ function triggerMessageEvent(eventName) {
     let body = queueMessages[senderId]
     clearTimeout(timerIds[senderId]);
     timerIds[senderId] = setTimeout(() => {
+        log.info("\tin fbServer after userMessage Emitting event "+eventName)
         serverEmitter.emit(eventName, body);
         delete queueMessages[senderId];
         delete timerIds[senderId]
@@ -75,7 +76,7 @@ serverEmitter.on('userMessage', messageFromUser)
 function messageFromUser(body) {
     let senderId = body.senderId;
     queueMessages[senderId] = [];
-    // log.info('\tin fbServer emitted event userMessage', body);
+    // log.info('\tin fbServer ok emitted event userMessage',"ohh");
     // let eventName = 'fbMessage_'+body.senderId;
     // log.info("in fbServer after userMessage Emitting event "+eventName)
     // serverEmitter.emit(eventName,"{response}");
