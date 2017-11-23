@@ -139,7 +139,8 @@ Messages
     .messages .message.new {
       transform: scale(0);
       transform-origin: 0 0;
-      animation: bounce 500ms linear both; }
+      animation: bounce 500ms linear both;
+        max-width: 95%; }
     .messages .message.loading::before {
       position: absolute;
       top: 50%;

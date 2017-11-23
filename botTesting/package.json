@@ -8,7 +8,14 @@
     "start": "node webapp/app.js",
     "cliFb": "node ./fb_test/cli.js"
   },
-  "keywords": ["Facebook Bot","BotTesting","Mocha","chai","sockets","nock"],
+  "keywords": [
+    "Facebook Bot",
+    "BotTesting",
+    "Mocha",
+    "chai",
+    "sockets",
+    "nock"
+  ],
   "author": "shankar kumar chaudhary <shankarkumarchaudhary96@gmail.com>",
   "license": "ISC",
   "dependencies": {

@@ -41,7 +41,7 @@
         <div class="row testflow-toolbar-row">
           <div class="col-sm-12">
             <div class="btn-group chat-toolbar" role="group" aria-label="...">
-              <button id="chat-clear" class="btn btn-info disabled" type="button" onclick="window.reload(true)">
+              <button id="chat-clear" class="btn btn-info disabled" type="button" onclick="reload()">
                   Reload
                 </button>
             </div>
@@ -49,9 +49,9 @@
         </div>
         <div class="row chat-window-row">
           <div class="col-md-12">
-            <a class="btn " href="#" onclick="createNewFlow()">Create New Flow &raquo;</a>
+            <a class="btn clickedCreateNewFlow" href="#" onclick="clickedCreateNewFlow()">Create New Flow &raquo;</a>
             <!--loop -->
-            <a class="list-group-item" onclick="viewFlow()" href="#">
+            <a class="list-group-item" onclick="viewFlowById('id')" href="#">
                 FlowId1
               </a>
           </div>
@@ -59,21 +59,21 @@
       </div>
 
       <!-- chatWindow: -->
-      <div class="col-md-8 chat-window-container">
+      <div class="col-md-8 chat-window-container" style="display: none">
         <div class="row chat-window-toolbar-row">
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="senderId" aria-label="senderId">
+              <input type="text" class="form-control inputSenderId" placeholder="senderId" aria-label="senderId">
               <span class="input-group-btn">
-                <button class="btn " type="button">✅</button>
+                <button class="btn validSenderId" title="required" type="button">✅</button>
               </span>
             </div>
           </div>
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="pageId" aria-label="pageId">
+              <input type="text" class="form-control inputPageId" placeholder="pageId" aria-label="pageId">
               <span class="input-group-btn">
-                <button class="btn " type="button">✅</button>
+                <button class="btn validPageId" title="required" type="button">✅</button>
               </span>
             </div>
           </div>
@@ -81,17 +81,17 @@
         <div class="row chat-window-toolbar-row">
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="appId" aria-label="appId">
+              <input type="text" class="form-control inputAppId" placeholder="appId" aria-label="appId">
               <span class="input-group-btn">
-                <button class="btn " type="button">✅</button>
+                <button class="btn validAppId" title="required" type="button">✅</button>
               </span>
             </div>
           </div>
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="flowId" aria-label="flowId">
+              <input type="text" class="form-control inputFlowId" placeholder="flowId" aria-label="flowId">
               <span class="input-group-btn">
-                <button class="btn " type="button">✅</button>
+                <button class="btn validFlowId" title="optional" type="button">✅</button>
               </span>
             </div>
           </div>
@@ -99,17 +99,28 @@
         <div class="row chat-window-toolbar-row">
           <div class="col-md-12">
             <div class="input-group">
-              <textarea type="text" class="form-control" placeholder="Description..." aria-label="flowDescription"></textarea>
+              <textarea type="text" class="form-control inputFlowDescription" placeholder="Description..." aria-label="flowDescription"></textarea>
               <span class="input-group-btn">
-                <button class="btn " type="button">✍</button>
+                <button class="btn validFlowDescription" title="optional" type="button">✍</button>
               </span>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn btn-secondary edit_update_flowInfo" href="#" title = "create" onclick="edit_update_flowInfo()" role="save">Update details &raquo;</button>
             </div>
           </div>
         </div>
         <div class="container">
           <div class="col-md-12">
             <br/>
-          <% include partials/chat %>
+            <% include partials/chat %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8 outer-hint">
+        <div class="jumbotron">
+          <div class="container">
+            <h1 class="display-3">Hello, Tester!</h1>
+            <p>You can generate TestData using this</p>
           </div>
         </div>
       </div>

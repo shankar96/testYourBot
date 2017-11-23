@@ -2,13 +2,8 @@ var $messages = $('.messages-content'),
     d, h, m,
     i = 0;
 console.log("started", $messages)
- var socket = io();
 $(window).load(function () {
     $messages.mCustomScrollbar();
-
-    setTimeout(function () {
-        fakeMessage();
-    }, 100);
 });
 
 function updateScrollbar() {
@@ -27,12 +22,18 @@ function setDate() {
 }
 
 
-function insertMessage() {
+function insertMessage(type) {
     msg = $('.message-input').val();
     if ($.trim(msg) == '') {
         return false;
     }
-    $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
+    $(`
+        <div class="message message-personal">
+            <div class="eachMessage">
+            `+ msg + `
+        </div>
+        </div>
+    `).appendTo($('.mCSB_container')).addClass('new');
     setDate();
     $('.message-input').val(null);
     updateScrollbar();
@@ -40,18 +41,18 @@ function insertMessage() {
     //     fakeMessage();
     // }, 1000 + (Math.random() * 20) * 100);
     //ajax call
-    getReplyMessage(msg)
+    getReplyMessage(msg, type)
 }
 
 $('.message-submit').click(function () {
     // console.log("message submit clicked", arguments, $('.message-input').val())
-    insertMessage();
+    insertMessage('text');
 });
 
 $(window).on('keydown', function (e) {
     // console.log("message submit keydown", e, "valie", $('.message-input').val())
     if (e.which == 13) {
-        insertMessage();
+        insertMessage('text');
         return false;
     }
 })
@@ -91,14 +92,35 @@ function fakeMessage() {
     }, 1000 + (Math.random() * 20) * 100);
 
 }
-function getReplyMessage(msg){
+function getReplyMessage(msg, type) {
     $('<div class="message loading new"><figure class="avatar"><img src="/images/pp.png" /></figure><span></span></div>').appendTo($('.mCSB_container'));
     updateScrollbar();
-
-    setTimeout(function(msg){
-        $('.message.loading').remove();
-        $('<div class="message new"><figure class="avatar"><img src="/images/pp.png" /></figure>' + 'Reply:-'+msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
-        setDate();
-        updateScrollbar();
-    },2000,msg);
+    disableInput();// disable typing untill get response
+    ((textMessage, type) => {
+        var formatMessage = {
+            flowId: "",
+            senderId: "",
+            pageId: "",
+            appId: "",
+            type: type,
+            text: textMessage
+        }
+        sendMessageToServer(formatMessage)
+    })(msg, type)
+}
+function updateReplyMessage(msg) {
+    enableInput();// enable typing after response
+    $('.message.loading').remove();
+    $(` 
+    <div class="message new">
+        <figure class="avatar">
+            <img src="/images/pp.png" />
+        </figure>
+        <div class="eachMessage">
+            `+ msg + `
+        </div>
+    </div>
+    `).appendTo($('.mCSB_container')).addClass('new col-md-12');
+    setDate();
+    updateScrollbar();
 }

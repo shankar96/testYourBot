@@ -66,3 +66,7 @@ body {
 	max-height: 200px;
 	max-width: 400px;
 }
+
+.eachMessage {
+    word-wrap: break-word;
+}
