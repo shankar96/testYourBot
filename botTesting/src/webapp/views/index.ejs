@@ -49,11 +49,13 @@
         </div>
         <div class="row chat-window-row">
           <div class="col-md-12">
-            <a class="btn clickedCreateNewFlow" href="#" onclick="clickedCreateNewFlow()">Create New Flow &raquo;</a>
+            <a class="btn create_save_flow" href="#" onclick="create_save_flow()" title="createNewFlow">Create New Flow &raquo;</a>
             <!--loop -->
-            <a class="list-group-item" onclick="viewFlowById('id')" href="#">
-                FlowId1
+            <% for( var i=0;i < locals.flowIds.length;i++) {%>
+            <a class="list-group-item" onclick="viewFlowById('<%= locals.flowIds[i] %>')" href="#" title="View <%= locals.flowIds[i] %>">
+                <%= locals.flowIds[i] %>
               </a>
+            <% } %>
           </div>
         </div>
       </div>
@@ -120,7 +122,7 @@
         <div class="jumbotron">
           <div class="container">
             <h1 class="display-3">Hello, Tester!</h1>
-            <p>You can generate TestData using this</p>
+            <p class="outer-hint-message">You can generate TestData using this</p>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use strict'
 var nock = require('nock')
-var appConf = require('../conf/testConf')
+var appConf = require('../../conf/testConf')
 var log = require('../utils/logger')
 var request = require('request')
 var webhookUrl = appConf.webhookUrl
@@ -25,8 +25,9 @@ var scope = nock('https://graph.facebook.com/')
         return '*';
     })
     .post('/v2.6/me/messages')
+    .query(function(){return true;})
     .reply(200)
-// .log(console.log);
+.log(console.log);
 // }
 // nock.recorder.rec();
 function handleError() {

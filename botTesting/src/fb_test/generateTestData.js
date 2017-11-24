@@ -4,7 +4,7 @@ var log = require('../utils/logger')
 var activeFlow = {}
 var activeTestSuite = {}
 let fbTestDataFile = require('./fbTestConf').getFbTestDataFile()
-log.info("setting fbTestDataFile => ",fbTestDataFile)
+log.info("setting fbTestDataFile => ", fbTestDataFile)
 console.log("FbTest Data filename ", fbTestDataFile)
 var sampleTestData = {
     "testData": {
@@ -87,7 +87,7 @@ function saveActiveFlowById(flowId) {
                     })
 
             }).catch((err) => {
-                reject({ success: true, err, message: "Error in readTestFile in saveActiveFlowById.." })
+                reject({ success: false, err, message: "Error in readTestFile in saveActiveFlowById.." })
             })
     })
 }
@@ -150,25 +150,39 @@ function updateKeyPairById(flowId, keyPair) {
         if (activeFlow[flowId]) {
             let updatedPair = [];
             let oldFlowId = flowId;
+            let success = true;
             if (Object.keys(keyPair).indexOf('flowId') > -1) {
-                let data = activeFlow[flowId];
-                // delete activeFlow[flowId];//delete old FlowId and data
-                activeFlow[keyPair['flowId']] = data;
-                activeFlow[keyPair['flowId']]['flowId'] = keyPair['flowId'];
-                updatedPair.push('flowId changed from ' + flowId + " to " + keyPair['flowId']);
-                flowId = keyPair['flowId']
-
-            }
-            for (key in keyPair) {
-                if (key != 'flowId') {
-                    updatedPair.push(key + ' changed from ' + activeFlow[flowId][key] + " to " + keyPair[key]);
-                    activeFlow[flowId][key] = keyPair[key];
-
+                let data = JSON.parse(JSON.stringify(activeFlow[flowId]));
+                if(keyPair['flowId']==""){
+                    keyPair['flowId'] = 'flowId_'+new Date().getTime();
                 }
+                // delete activeFlow[flowId];//delete old FlowId and data// mostly we should delete it
+                if (activeFlow[keyPair['flowId']]) {
+                    //some flow with same ID is available cant Replace
+                    success = 'false';
+                } else {
+                    activeFlow[keyPair['flowId']] = data;//copy
+                    activeFlow[keyPair['flowId']]['flowId'] = keyPair['flowId'];
+                    updatedPair.push('flowId changed from ' + flowId + " to " + keyPair['flowId']);
+                    flowId = keyPair['flowId']
+                }
+
             }
-            let newFlowId = keyPair['flowId'] ? keyPair['flowId'] : flowId;
-            console.log("cache file....", activeFlow)
-            resolve({ success: "true", updatedPair, message: "updated in cache..", oldFlowId, newFlowId })
+            if (success == true) {
+                for (key in keyPair) {
+                    if (key != 'flowId') {
+                        updatedPair.push(key + ' changed from ' + activeFlow[flowId][key] + " to " + keyPair[key]);
+                        activeFlow[flowId][key] = keyPair[key];
+
+                    }
+                }
+                let newFlowId = keyPair['flowId'] ? keyPair['flowId'] : flowId;
+                console.log("cache file....", activeFlow);
+                resolve({ success, updatedPair, message: "updated in cache..", oldFlowId, newFlowId,keyPair })
+            }else{
+                resolve({ success, updatedPair, message: "couldn't update because there is already an active flow with same flowId try with Other flowId"})
+            }
+            
         } else {
             //loading flowId in Cache
             testUtils.readTestFile(fbTestDataFile)
@@ -176,7 +190,7 @@ function updateKeyPairById(flowId, keyPair) {
                     data = JSON.parse(data);
                     if (data.testData && data.testData.flows) {
                         activeFlow[flowId] = data.testData.flows[flowId];
-                        console.log("reading file....",flowId, activeFlow, data)
+                        console.log("reading file....", flowId, activeFlow, data)
                         if (activeFlow[flowId]) {
                             updateKeyPairById(flowId, keyPair)
                                 .then((resp) => {
@@ -199,7 +213,7 @@ function updateKeyPairById(flowId, keyPair) {
         }
     })
 }
-function deleteFlowById(flowId,from) {
+function deleteFlowById(flowId, from) {
     return new Promise((resolve, reject) => {
         if (activeFlow[flowId] && from == 'fromCache') {
             delete activeFlow[flowId];
@@ -230,23 +244,24 @@ function viewFlowById(flowId) {
     return new Promise((resolve, reject) => {
         let flow = activeFlow[flowId]
         if (flow) {
-            resolve({ success: true, flow, message: "viewing from activeFlow" })
+            resolve({ success: true, flow, message: "viewing from activeFlow..." })
         } else {
             testUtils.readTestFile(fbTestDataFile)
                 .then((data) => {
                     data = JSON.parse(data);
                     if (data.testData && data.testData.flows) {
-                        flow = data.testData.flows[flowId]
+                        flow = data.testData.flows[flowId];
+                        resolve({ success: true, flow, message: "viewing from file..." })
                     } else {
-                        flow = {}
+                        resolve({ success:false, message: "No such Flow Found...." })
                     }
-                    resolve({ success: true, flow, message: "viewing from file" })
                 }).catch((err) => {
                     reject({ success: false, err, message: "Error in viewFlowById" });
                 })
         }
     })
 }
+
 function viewAllFlowId() {
     return new Promise((resolve, reject) => {
         testUtils.readTestFile(fbTestDataFile)
@@ -257,7 +272,12 @@ function viewAllFlowId() {
                     flowIds1 = Object.keys(data.testData.flows);
                 }
                 flowIds2 = Object.keys(activeFlow);
-                resolve({ success: true, flowIds: flowIds1.concat(flowIds2), message: "viewing from file and activeFlow" })
+                for(let key of flowIds2){
+                    if(flowIds1.indexOf(key)<0){
+                        flowIds1.push(key);
+                    }
+                }
+                resolve({ success: true, flowIds: flowIds1, message: "viewing from file and activeFlow" })
             }).catch((err) => {
                 reject({ success: false, err, message: "Error in readingTestFile in viewAllFlowId" })
             })
@@ -270,5 +290,6 @@ module.exports = {
     updateKeyPairById,
     viewFlowById,
     deleteFlowById,
-    viewAllFlowId
+    viewAllFlowId,
+    activeFlow
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "botTesting/node_modules/.bin/mocha test.js",
+    "test": "botTesting/node_modules/.bin/mocha botTesting/src/test.js",
     "start": "node src/webapp/app.js"
   },
   "keywords": [],

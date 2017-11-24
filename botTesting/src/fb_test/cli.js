@@ -1,7 +1,7 @@
 'use strict'
 var generateTestData = require('./generateTestData');
 var readLine = require('readline');
-var appserver = require('../../src/webapp/app');// to start app server
+var appserver = require('../../../src/webapp/app');// to start app server
 var fbClient = require('../fb_client/fbClient'); // to dispatch message via fbClient
 var fbServer = require('../fb_mock_server/fbServer')// to start mock server
 
@@ -46,6 +46,7 @@ function keyPressSimulate() {
     process.stdin.on('keypress', (str, key) => {
         if (key.ctrl && key.name === 'c') {
             coloredText('Process interrupeted..', colors.FgRed)
+            console.log(colors.Reset);
         }
         // else {
         //     coloredText(`You pressed the "${str}" key`);
@@ -442,4 +443,4 @@ function initiate() {
 }
 setTimeout(() => {
     initiate();
-})
+},10)

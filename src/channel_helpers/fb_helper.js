@@ -111,7 +111,7 @@ function sendFBMessage(messageData) {
         request({
             url: appConf.fbUrl,
             qs: {
-                access_token: appConf.token
+                access_token: appConf.fbToken
             },
             method: 'POST',
             json: {

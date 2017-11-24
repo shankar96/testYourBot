@@ -1,6 +1,6 @@
 'use strict'
 var request = require('request')
-var appConf = require('../conf/testConf')
+var appConf = require('../../conf/testConf')
 var log = require('../utils/logger')
 var clientEmitter = require('../event_handler/eventHandler')
 function sendMessageToFbServer(msg, cb) {

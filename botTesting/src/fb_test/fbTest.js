@@ -189,10 +189,10 @@ function checkEachFlow(flowInfo) {
         })
     })
 }
-// checkEachFlow(flows['flow_1511279317574'])
-// .then((status) => {
-//     console.log("flow resolved", status)
-// })
+checkEachFlow(flows['flow_1511279317574'])
+.then((status) => {
+    console.log("flow resolved", status)
+})
 // describe('', function () {
 //     it('', function () {
 

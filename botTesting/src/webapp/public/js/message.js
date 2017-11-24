@@ -98,10 +98,10 @@ function getReplyMessage(msg, type) {
     disableInput();// disable typing untill get response
     ((textMessage, type) => {
         var formatMessage = {
-            flowId: "",
-            senderId: "",
-            pageId: "",
-            appId: "",
+            flowId: $('.inputFlowId').prop('value'),
+            senderId: $('.inputSenderId').prop('value'),
+            pageId: $('.inputPageId').prop('value'),
+            appId: $('.inputAppId').prop('value'),
             type: type,
             text: textMessage
         }
@@ -117,10 +117,40 @@ function updateReplyMessage(msg) {
             <img src="/images/pp.png" />
         </figure>
         <div class="eachMessage">
-            `+ msg + `
+            `+ JSON.stringify(msg, null, 2) + `
         </div>
     </div>
     `).appendTo($('.mCSB_container')).addClass('new col-md-12');
     setDate();
     updateScrollbar();
+}
+
+function loadChatWindowWithMessages(flow) {
+    console.log("loadChatWindowWithMessages", flow)
+    for (var i = 0; i < flow.length; i++) {
+        $(`
+            <div class="message message-personal">
+                <div class="eachMessage" title="`+flow[i].query.type+`">
+                `+ flow[i].query.text + `
+            </div>
+            </div>
+        `).appendTo($('.mCSB_container')).addClass('new');
+        setDate();
+        $('.message-input').val(null);
+        updateScrollbar();
+
+        $('.message.loading').remove();
+        $(` 
+            <div class="message new">
+                <figure class="avatar">
+                    <img src="/images/pp.png" />
+                </figure>
+                <div class="eachMessage">
+                    `+ JSON.stringify(flow[i].response, null, 2) + `
+                </div>
+            </div>
+        `).appendTo($('.mCSB_container')).addClass('new col-md-12');
+        setDate();
+        updateScrollbar();
+    }
 }
