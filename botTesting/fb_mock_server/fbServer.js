@@ -6,7 +6,8 @@ var request = require('request')
 var webhookUrl = appConf.webhookUrl
 var messageFormat = require('./messageFormat')
 var serverEmitter = require('../event_handler/eventHandler')
-
+var crypto = require('crypto');
+var Promise = require('bluebird');
 log.info('Mocking FB server')
 
 function nockServer() { }
@@ -40,7 +41,7 @@ var timerIds = {
 
 }
 setInterval(() => {
-    if (nock.pendingMocks().length > 0){
+    if (nock.pendingMocks().length > 0) {
         // log.info("\nIn ", queueMessages, nock.pendingMocks());
         // nock.cleanAll();
     }
@@ -51,7 +52,7 @@ function triggerMessageEvent(eventName) {
     let body = queueMessages[senderId]
     clearTimeout(timerIds[senderId]);
     timerIds[senderId] = setTimeout(() => {
-        log.info("\tin fbServer after userMessage Emitting event "+eventName)
+        log.info("\tin fbServer after userMessage Emitting event " + eventName)
         serverEmitter.emit(eventName, body);
         delete queueMessages[senderId];
         delete timerIds[senderId]
@@ -96,24 +97,38 @@ function messageFromUser(body) {
 /**
  
  */
+function generate_X_Hub_Signature(algorithm, secret, buffer) {
+    const hmac = crypto.createHmac(algorithm, secret);
+    hmac.update(buffer, 'utf-8');
+    return algorithm + '=' + hmac.digest('hex');
 
-function sendMessageToWebhook(structuredMessage,appId) {
-    let options = {
-        url: webhookUrl.replace(':appId',appId),
-        method: "POST",
-        headers: {
-            'x-hub-signature': ""
-        },
-        json: structuredMessage
-    }
-    request(options, function (err, resp, body) {
-        if (err) {
-            log.info("Error in sendMessageToWebhook", err)
-        } else {
-
-        }
-        // console.log("body in sendMessageToWebhook ",body);
+}
+function getAppSecretByAppId(appId) {
+    return new Promise((resolve, reject) => {
+        resolve('mySecretKey')//fetch from dbHelper or need to set in config
     })
+}
+function sendMessageToWebhook(structuredMessage, appId) {
+    getAppSecretByAppId(appId)
+        .then((appSecret) => {
+            let options = {
+                url: webhookUrl.replace(':appId', appId),
+                method: "POST",
+                headers: {
+                    'x-hub-signature': generate_X_Hub_Signature('sha1', appSecret, new Buffer(JSON.stringify(structuredMessage)))
+                },
+                json: structuredMessage
+            }
+            request(options, function (err, resp, body) {
+                if (err) {
+                    log.info("Error in sendMessageToWebhook", err)
+                } else {
+
+                }
+                // console.log("body in sendMessageToWebhook ",body);
+            })
+        })
+
 }
 function buildStructuredMessage(msg) {
     //format Message as send by fb
@@ -128,7 +143,7 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].timestamp = new Date().getTime()
         structuredMessage.entry[0].messaging[0].postback.payload = msg.text
         structuredMessage.entry[0].messaging[0].postback.title = "Payload Title"
-        sendMessageToWebhook(structuredMessage,msg.appId);
+        sendMessageToWebhook(structuredMessage, msg.appId);
     } else if (msg.type == "quick_replies") {
         structuredMessage = messageFormat.quickReplyMessage
 
@@ -139,7 +154,7 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].timestamp = new Date().getTime()
         structuredMessage.entry[0].messaging[0].message.text = "Quick Replies Title"
         structuredMessage.entry[0].messaging[0].message.quick_reply.payload = msg.text
-        sendMessageToWebhook(structuredMessage,msg.appId);
+        sendMessageToWebhook(structuredMessage, msg.appId);
     } else if (msg.type == "text") {
         structuredMessage = messageFormat.textMessage
 
@@ -149,10 +164,10 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].sender.id = msg.senderId
         structuredMessage.entry[0].messaging[0].timestamp = new Date().getTime()
         structuredMessage.entry[0].messaging[0].message.text = msg.text
-        sendMessageToWebhook(structuredMessage,msg.appId);
+        sendMessageToWebhook(structuredMessage, msg.appId);
     } else {
         log.info("Invalid Message from fbClient");
-        let eventName ='fbMessage_' + msg.senderId;
-        serverEmitter.emit(eventName, {"err":"Invalid Message from fbClient"});
+        let eventName = 'fbMessage_' + msg.senderId;
+        serverEmitter.emit(eventName, { "err": "Invalid Message from fbClient" });
     }
 }

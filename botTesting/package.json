@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node_modules/.bin/mocha test.js",
     "start": "node webapp/app.js",
-    "cliFb": "node ./fb_test/cli.js"
+    "cliFb": "node ./fb_test/cli.js",
+    "webTest": "node_modules/.bin/mocha webapp/app.js"
   },
   "keywords": [
     "Facebook Bot",

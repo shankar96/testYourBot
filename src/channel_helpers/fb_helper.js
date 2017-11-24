@@ -2,6 +2,47 @@
 var request = require('request')
 var appConf = require('../../conf/appconf')
 var log = require('../utils/logger')
+const crypto = require('crypto');
+var cryptoUtil = {
+    createHmacSha1Hash(secretKey, data) {
+        var hashValue;
+        try {
+            hashValue = crypto.createHmac('sha1', secretKey)
+                .update(data)
+                .digest('hex');
+        } catch (err) {
+            log.error(err);
+        }
+        return hashValue;
+    }
+}
+function verifyRequestSignature(signatureHeader, appSecret, requestBody) {
+    log.info('start of verifyRequestSignature')
+    return new Promise(
+        function (resolve, reject) {
+            try {
+                if (signatureHeader && appSecret && requestBody) {
+                    var elements = signatureHeader.split('=')
+                    var signatureHash = elements[1]
+                    var calculatedHash = cryptoUtil.createHmacSha1Hash(appSecret, requestBody)
+                    if (signatureHash !== calculatedHash) {
+                        log.info("Couldn't validate the request signature as singature hash and calculated hash are not matching")
+                        reject(new Error("Couldn't validate the request signature."))
+                    } else {
+                        log.info('valid request signature')
+                        resolve('Valid Signature')
+                    }
+                } else {
+                    log.info("Couldn't validate the request signature as some fileds are missing", signatureHeader, appSecret, requestBody)
+                    reject(new Error("Couldn't validate the request signature."))
+                }
+            } catch (err) {
+                log.info("Couldn't validate the request signature.")
+                reject(err)
+            }
+        })
+}
+
 function parseIncomingMessage(req) {
     log.info('start of parsing incoming request', JSON.stringify(req.body))
     try {
@@ -92,5 +133,6 @@ function sendFBMessage(messageData) {
 
 module.exports = {
     parseIncomingMessage,
-    sendFBMessage
+    sendFBMessage,
+    verifyRequestSignature
 }

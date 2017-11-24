@@ -72,9 +72,9 @@ function fbPost(req, res) {
                 processMessage(valueContext);
             });
         }
-        return res.status(200).json({
-            status: "ok"
-        });
+        // return res.status(200).json({
+        //     status: "ok"
+        // });
     } catch (err) {
         log.error({ err: err }, "error in handling request");
         return res.status(400).json({
