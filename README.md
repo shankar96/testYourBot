@@ -166,43 +166,43 @@ containing fields which is self explanatory.
 
 ```
 {
-  "title": "Testing Flow => <transactionDetails, message {3}>",
-  "responseTime": 3074,
+  "title": "Testing Flow => <flow_1513768580988, message {3}>",
+  "responseTime": 588,
   "timedOut": false,
-  "duration": 6,
+  "duration": 4,
   "state": "passed",
   "speed": "fast",
-  "flowId": "transactionDetails",
+  "flowId": "flow_1513768580988",
   "messageId": "3",
   "info": {
     "function": "checkEachMessage",
     "clientMessageFormat": {
       "type": "text",
-      "text": "thanks",
-      "senderId": "1586711078087024",
-      "pageId": "202153767012429",
-      "appId": "216838955439477"
+      "text": "bye",
+      "senderId": "1",
+      "pageId": "2",
+      "appId": "2"
     },
     "timeoutSet": 30000,
     "timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
-    "responseTime": 3074,
+    "responseTime": 588,
     "response": [
       {
         "recipient": {
-          "id": "1586711078087024"
+          "id": "1"
         },
         "message": {
-          "text": "Anytime. That's what I'm here for."
+          "text": "Bye."
         }
       }
     ],
     "savedResponse": [
       {
         "recipient": {
-          "id": "1586711078087024"
+          "id": "1"
         },
         "message": {
-          "text": "Anytime. That's what I'm here for."
+          "text": "Till next time!"
         }
       }
     ]
