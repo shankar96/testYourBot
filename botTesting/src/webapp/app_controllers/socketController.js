@@ -1,4 +1,6 @@
+'use strict'
 var generateFbTestData = require('../../fb_test/generateTestData');
+var mochaConfig = require('../../mochaConfig')
 var appServer = require('../../../../src/webapp/app');
 var Promise = require('bluebird');
 var fbClient = require('../../fb_client/fbClient')
@@ -25,19 +27,19 @@ function processMessageRequest(socket, flowMessage) {
 }
 function updateFlowInfo(socket,oldFlowInfo,newFlowInfo){
     let keyPair = {};
-    for(key in newFlowInfo){
+    for(let key in newFlowInfo){
         if(newFlowInfo[key]!=oldFlowInfo[key]){
             keyPair[key] = newFlowInfo[key];
         }
     }
     generateFbTestData.updateKeyPairById(oldFlowInfo.flowId,keyPair)
     .then((info)=>{
-        log.info(info)
+        log.info("updateKeyPairById",info)
         socket.emit('updated_flowInfo',info)
     })
 }
 function saveActiveFlow(socket,flowInfo){
-    console.log('saveActiveFlow',flowInfo)
+    log.info('saveActiveFlow',flowInfo)
     generateFbTestData.saveActiveFlowById(flowInfo.flowId)
     .then((info)=>{
         socket.emit('saved_activeFlow',info)
@@ -47,6 +49,21 @@ function loadFlowById(socket,flowId){
     generateFbTestData.viewFlowById(flowId)
     .then((info)=>{
         socket.emit('loadedFlow',info)
+    })
+}
+function deleteFlowById(socket,flowInfo){
+    generateFbTestData.deleteFlowById(flowInfo.flowId)
+    .then((info)=>{
+        socket.emit('deletedFlow',info)
+    })
+}
+function testFlowById(socket, flowInfo) {
+  mochaConfig.fbTests(socket, flowInfo.flowId)
+}
+function getCustomFlowInfo(socket) {
+  generateFbTestData.getCustomFlowInfo()
+    .then((info)=>{
+      socket.emit('getCustomFlowInfo',info)
     })
 }
 module.exports = function (io) {
@@ -77,6 +94,18 @@ module.exports = function (io) {
         socket.on('viewFlowById',function(flowId){
             log.info('viewFlowById',flowId);
             loadFlowById(socket,flowId)
+        })
+        socket.on('deleteFlowById',function(flowInfo){
+            log.info('deleteFlowById ',flowInfo)
+            deleteFlowById(socket,flowInfo)
+        })
+        socket.on('testFlowById',function (flowInfo) {
+          log.info('testFlowById',flowInfo);
+          testFlowById(socket,flowInfo);
+        })
+        socket.on('getCustomFlowInfo',function () {
+          log.info('getCustomFlowInfo')
+          getCustomFlowInfo(socket)
         })
         //require test module 
     });

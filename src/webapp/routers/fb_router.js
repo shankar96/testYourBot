@@ -9,7 +9,7 @@ function callVerifier(req, res, buf) {
 }
 
 var fbRouter = express.Router();
-fbRouter.get('/home',fbController.home)
+fbRouter.get('/admin',fbController.home)
 fbRouter.post('/:appId',[bodyParser.json({
 		verify: callVerifier
 	}), verifyFbWebhookSignature],fbController.fbPost)

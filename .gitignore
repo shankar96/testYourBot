@@ -1,3 +1,7 @@
 conf/
 node_modules/
 npm-debug.log
+trash/
+botTesting/node_modules/
+logs/
+botTesting/logs

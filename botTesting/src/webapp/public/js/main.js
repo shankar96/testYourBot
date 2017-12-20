@@ -1,4 +1,5 @@
 var activeFlow = {};
+var customFlowInfo = {};
 function hideFlowWindow() {
     $('.chat-window-container').hide();
 }
@@ -38,10 +39,12 @@ function hideChatWindow(type) {
     }
 }
 function disableInput() {
+    alertInfo("Info!","Your message is processing now...")
     $('.message-input').prop('disabled', true)
     $('.message-input').prop('placeholder', "processing...")
 }
 function enableInput() {
+    alertInfo("Info!","Type your message now...")
     $('.message-input').prop('disabled', false)
     $('.message-input').focus()
     $('.message-input').prop('placeholder', "Type your message...")
@@ -120,6 +123,7 @@ function validateFlowInfo() {
         return { senderId, pageId, appId, description, flowId, valid: true }
     } else {
         // alert("Please set the required field => "+help);
+        alertWarning("Warning","Please set the required field => " + help)
         showInnerHint({ innerHTML: "Please set the required field => " + help, color: 'red' })
         return { valid: false }
     }
@@ -156,11 +160,15 @@ function create_save_flow() {
         console.log('activeFlow going on', activeFlow);
         if ($('.create_save_flow').prop('title') == 'saveActiveFlow') {
             socket.emit('save_activeFlow', activeFlow);
+        } else {
+          alertWarning("Warning!","An active flow is going on reset/reload to create new flow")
         }
     } else {
         //show chat set conf
-
+        enableFlowInfo()
         console.log("creating new flow...")
+        alertSuccess("Success!","add flow Details and create a flow ")
+        setCustomFlowInfo();
         showFlowWindow($('.create_save_flow').prop('title'));
         $('.edit_update_flowInfo').prop('disabled', false);
         $('.edit_update_flowInfo').prop('innerText', 'Create Flow Details »');
@@ -215,6 +223,9 @@ function updatedFlowInfo(updatedInfo) {
         $('.edit_update_flowInfo').prop('disabled', false);
         $('.edit_update_flowInfo').prop('innerText', 'Edit details »');
         $('.edit_update_flowInfo').prop('title', "edit");
+        //create button to save
+        $('.create_save_flow').prop('title', 'saveActiveFlow');
+        $('.create_save_flow').prop('innerText', 'save Active Flow »');
     } else {
         saveRespondedFlowInfo(activeFlow);
         enableInput();// enable typing
@@ -222,6 +233,9 @@ function updatedFlowInfo(updatedInfo) {
         $('.edit_update_flowInfo').prop('disabled', false);
         $('.edit_update_flowInfo').prop('innerText', 'Edit details »');
         $('.edit_update_flowInfo').prop('title', "edit");
+        //create button to save
+        $('.create_save_flow').prop('title', 'saveActiveFlow');
+        $('.create_save_flow').prop('innerText', 'save Active Flow »');
         console.log("some Error", updatedInfo)
     }
 }
@@ -245,7 +259,7 @@ function savedActiveFlow(savedInfo) {
     if (savedInfo.success == true) {
         hideFlowWindow()
         resetFlowInfo();
-        showOuterHint({ innerText: "successfully saved..." });
+        showOuterHint({ innerHTML: "successfully saved..." });
         enableFlowInfo()
         //delete all messages
         //button to create new flow
@@ -283,45 +297,159 @@ function loadedFlowInfoById(flowInfo) {
         $('.edit_update_flowInfo').prop('innerText', 'Edit Flow Details »');
         $('.edit_update_flowInfo').prop('title', "edit");
 
+    } else if(flowInfo.err=='404'){
+        showOuterHint({ innerHTML: flowInfo.message, color: 'red' });
+        setTimeout(()=>{
+            reset();
+        },2000)
     } else {
         showOuterHint({ innerHTML: flowInfo.message, color: 'red' })
     }
 }
-function reload() {
+function deletedFlow(info){
+    console.log(info);
+    alertSuccess("Success!","successFully deleted flow")
+    showOuterHint({innerHTML:info.message+"<br/> Refresh Now.."})
+    setTimeout(()=>{
+        reset();
+    },2000);
+}
+function deleteActiveFlow(){
+    if (Object.keys(activeFlow).length > 0) {
+        console.log('activeFlow going on', activeFlow);
+        alertDanger("Danger!","Deleting flowId"+activeFlow.flowId)
+        socket.emit("deleteFlowById",activeFlow);
+        hideFlowWindow();
+        showOuterHint({innerHTML:"deleting flowId => "+activeFlow.flowId})
+        resetFlowInfo();
+        
+    } else {
+        console.log("No active Flow to delete")
+    }
+}
+function testedFlow(info) {
+  console.log("testedFlow",info);
+  var pass = 0;
+  var failed = 0;
+  for(let key in info){
+    if(info[key].state === 'passed'){
+      pass++;
+    }else{
+      failed++;
+    }
+  }
+  alertInfo("Info!","<span>Total messages tested => "+Object.keys(info).length+"</span><br/><span style='color: green;'> Passed Test "+pass+"</span><br/><span style='color: red'>  failed test "+failed+"</span>")
+}
+
+function testingInfo(info) {
+  console.log("testingInfo",info);
+  let title = ""
+  if(info.state === 'passed'){
+    title = '<p style="color:green">'+info.title.replace("<","&lt;").replace(">","&gt;")+' </p>'
+    alertSuccess("Success!",title)
+  }else{
+    title = '<p style="color:red">'+info.title.replace("<","&lt;").replace(">","&gt;")+' </p>'
+    alertDanger("Danger!",title)
+  }
+  showOuterHint({
+    innerHTML:"Testing in process => {"+activeFlow.flowId+"} <br/>"
+              +title
+              +"<pre>"+JSON.stringify(info, null, '  ').replace("<","&lt;").replace(">","&gt;")+"</pre>"
+  })
+
+}
+function testFlow() {
+  if (Object.keys(activeFlow).length > 0) {
+    console.log('activeFlow going on', activeFlow);
+    alertInfo("Info!","testing of flow with flowId"+activeFlow.flowId)
+    socket.emit("testFlowById",activeFlow);
+    hideFlowWindow();
+    showOuterHint({innerHTML:"testFlowById flowId => "+activeFlow.flowId})
+    // resetFlowInfo();
+
+  } else {
+    console.log("No active Flow to test");
+    alertWarning("Warning!","There is no active flow to test..")
+  }
+}
+function setCustomFlowInfo() {
+  if(Object.keys(customFlowInfo).length > 0){
+    console.log("set custom flow and get new custom flow")
+    $('.inputSenderId').prop('value', customFlowInfo.senderId);
+    $('.inputPageId').prop('value', customFlowInfo.pageId);
+    $('.inputAppId').prop('value',customFlowInfo.appId);
+    getCustomFlowInfo()
+  }else {
+    console.log("get new custom flow...")
+    getCustomFlowInfo()
+  }
+}
+function getCustomFlowInfo(info){
+  if(info){
+    console.log("updating custom flow....")
+    customFlowInfo = info;
+  }else{
+    socket.emit('getCustomFlowInfo',"");
+  }
+}
+function reset() {
     if (Object.keys(activeFlow).length > 0) {
         //warn
-        console.log('activeFlow going on', activeFlow)
+        console.log('activeFlow going on', activeFlow);
+        alertWarning("Warning!","resetting active flow..")
+        delete activeFlow;
+        activeFlow ={};
+        resetFlowInfo();
+        hideFlowWindow();
+        showOuterHint({innerHTML:"You can generate TestData using this"});
+        //button to create new flow
+        $('.create_save_flow').prop('title', 'createNewFlow');
+        $('.create_save_flow').prop('innerText', 'Create New Flow »');
     } else {
+      alertWarning("Warning!","Reloading the page")
         location.reload()
     }
 }
 var socket;
 $(window).load(function () {
-    socket = io();
-    socket.on('chat_message', function (msg) {
-        console.log("received Message", msg);
-        receivedMessageFromServer(msg)
+  socket = io();
+  socket.on('chat_message', function (msg) {
+      console.log("received Message", msg);
+      receivedMessageFromServer(msg)
 
-    });
-    socket.on('new_flow_created', function (info) {
-        newFlowCreated(info)
-    })
-    socket.on('updated_flowInfo', function (updatedInfo) {
-        updatedFlowInfo(updatedInfo)
-    })
-    socket.on('saved_activeFlow', function (savedInfo) {
-        savedActiveFlow(savedInfo)
-    })
-    socket.on('loadedFlow', function (info) {
-        loadedFlowInfoById(info)
-    })
-    hideFlowWindow();
+  });
+  socket.on('new_flow_created', function (info) {
+      newFlowCreated(info)
+  })
+  socket.on('updated_flowInfo', function (updatedInfo) {
+      updatedFlowInfo(updatedInfo)
+  })
+  socket.on('saved_activeFlow', function (savedInfo) {
+      savedActiveFlow(savedInfo)
+  })
+  socket.on('loadedFlow', function (info) {
+      loadedFlowInfoById(info)
+  })
+  socket.on('deletedFlow',function(info){
+      deletedFlow(info);
+  })
+  socket.on('testedFlow',function(info){
+    testedFlow(info);
+  })
+  socket.on('testingInfo',function(info){
+    testingInfo(info);
+  })
+  socket.on('getCustomFlowInfo',function (info) {
+    getCustomFlowInfo(info);
+  })
+  hideFlowWindow();
+  getCustomFlowInfo();
+  alertInfo("Info!","welcome to bot testing..")
 });
 function sendMessageToServer(msg) {
     console.log("sending message", msg)
     socket.emit('chat_message', msg);
 }
 function receivedMessageFromServer(msg) {
-
     updateReplyMessage(msg)
 }

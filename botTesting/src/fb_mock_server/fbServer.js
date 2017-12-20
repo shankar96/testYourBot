@@ -10,78 +10,59 @@ var crypto = require('crypto');
 var Promise = require('bluebird');
 log.info('Mocking FB server')
 
-function nockServer() { }
 //receive messages from webhooks
-var scope = nock('https://graph.facebook.com/')
+var scope = nock(appConf.fbUrl)
     .persist()
     .filteringRequestBody(function (body) {
         body = JSON.parse(body);
-        // console.log("body",body,body.recipient)
         serverEmitter.emit('webhookMessage', body);
-        // console.log(scope) 
-        // // scope.intercept
-        // // scope.done()
-        // nock.cleanAll()
         return '*';
     })
-    .post('/v2.6/me/messages')
+    .post(appConf.fbMessageEndPoint)
     .query(function(){return true;})
     .reply(200)
-.log(console.log);
-// }
-// nock.recorder.rec();
+    // .log(console.log);
 function handleError() {
-    console.log('uncaughtException', arguments)
+    log.error('uncaughtException', arguments)
 }
 process.on('uncaughtException', handleError)
 process.on('unhandledRejection', handleError)
-var queueMessages = {
-
-}
-var timerIds = {
-
-}
-setInterval(() => {
-    if (nock.pendingMocks().length > 0) {
-        // log.info("\nIn ", queueMessages, nock.pendingMocks());
-        // nock.cleanAll();
-    }
-}, 1000)
+/**
+ * queuing webhook responses for each user
+ */
+var queueMessages = {}
+var timerIds = {}
 serverEmitter.on('webhookMessage', messageFromWebhook)
 function triggerMessageEvent(eventName) {
     let senderId = eventName.split('_')[1];
     let body = queueMessages[senderId]
     clearTimeout(timerIds[senderId]);
     timerIds[senderId] = setTimeout(() => {
-        log.info("\tin fbServer after userMessage Emitting event " + eventName)
+        // log.info("\tin fbServer after webhook Response Message Emitting event " + eventName)
         serverEmitter.emit(eventName, body);
         delete queueMessages[senderId];
         delete timerIds[senderId]
     }, 100)
-    // log.info("In trigger", queueMessages[senderId],nock.pendingMocks())
-
 }
 serverEmitter.on('triggerMessageEvent', triggerMessageEvent)
 function messageFromWebhook(body) {
-    //deliver to client using eventEmitter
-    // log.info('in messageFromWebhook', body)
+    //queMessages webhook responses to deliver to client at once (easier for testing all responses for a query at once)
     let senderId = body.recipient.id;
     let eventName = 'fbMessage_' + senderId;
-    // log.info("in fbServer Emitting event "+eventName);
-    queueMessages[senderId].push(body)
-
-    serverEmitter.emit('triggerMessageEvent', eventName)
-    // console.log("queMessages", queueMessages, new Date().getTime())
+    if(queueMessages[senderId]) {
+      queueMessages[senderId].push(body)
+      // console.log("messageFromWebhook"+new Date().getTime(),body, queueMessages)
+      serverEmitter.emit('triggerMessageEvent', eventName)
+    }else{
+      log.error("No queue in messageFromWebhook", body, queueMessages)
+    }
 }
 
 serverEmitter.on('userMessage', messageFromUser)
 function messageFromUser(body) {
     let senderId = body.senderId;
     queueMessages[senderId] = [];
-    // log.info('\tin fbServer ok emitted event userMessage',"ohh");
-    // let eventName = 'fbMessage_'+body.senderId;
-    // log.info("in fbServer after userMessage Emitting event "+eventName)
-    // serverEmitter.emit(eventName,"{response}");
+    // log.info('\tin fbServer messageFromUser'+new Date().getTime(),queueMessages[senderId]);
     //send to webhook Api
     buildStructuredMessage(body);
 
@@ -106,7 +87,12 @@ function generate_X_Hub_Signature(algorithm, secret, buffer) {
 }
 function getAppSecretByAppId(appId) {
     return new Promise((resolve, reject) => {
-        resolve('mySecretKey')//fetch from dbHelper or need to set in config
+        let secretKey = appConf.fbSecretKeyByAppId[appId]
+        if(secretKey){
+            resolve(secretKey)
+        }else{
+            resolve('mySecretKey')//fetch from dbHelper or need to set in config
+        }
     })
 }
 function sendMessageToWebhook(structuredMessage, appId) {
@@ -122,11 +108,8 @@ function sendMessageToWebhook(structuredMessage, appId) {
             }
             request(options, function (err, resp, body) {
                 if (err) {
-                    log.info("Error in sendMessageToWebhook", err)
-                } else {
-
+                    log.error("Error in sendMessageToWebhook", err)
                 }
-                // console.log("body in sendMessageToWebhook ",body);
             })
         })
 
@@ -167,7 +150,7 @@ function buildStructuredMessage(msg) {
         structuredMessage.entry[0].messaging[0].message.text = msg.text
         sendMessageToWebhook(structuredMessage, msg.appId);
     } else {
-        log.info("Invalid Message from fbClient");
+        log.error("Invalid Message from fbClient");
         let eventName = 'fbMessage_' + msg.senderId;
         serverEmitter.emit(eventName, { "err": "Invalid Message from fbClient" });
     }

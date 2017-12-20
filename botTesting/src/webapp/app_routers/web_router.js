@@ -4,5 +4,6 @@ const express = require('express');
 const webRouter = express.Router();
 webRouter.get('/web',webController.web);
 webRouter.get('/home',webController.home);
-webRouter.get('/activeFlowInfo',webController.activeFlowInfo)
+webRouter.get('/activeFlowInfo',webController.activeFlowInfo);
+webRouter.get('/docs',webController.docs)
 module.exports = webRouter;

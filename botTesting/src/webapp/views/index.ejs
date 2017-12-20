@@ -17,7 +17,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">docs <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/docs">docs <span class="sr-only">(current)</span></a>
         </li>
 
       </ul>
@@ -35,27 +35,57 @@
       
     </div> -->
     <br><br/><br/>
+      <div class="col-md-12 alertInfo" style="z-index: 100;width:100%">
+          <!-- SHOW ALERTS MESSAGES-->
+      </div>
 
     <div class="row">
       <div class="col-md-4 testflow-container">
         <div class="row testflow-toolbar-row">
           <div class="col-sm-12">
             <div class="btn-group chat-toolbar" role="group" aria-label="...">
-              <button id="chat-clear" class="btn btn-info disabled" type="button" onclick="reload()">
-                  Reload
+              <button id="chat-clear" class="btn btn-info disabled" type="button" onclick="reset()">
+                  Reset/Refresh
+                </button> &nbsp;&nbsp;&nbsp;&nbsp;
+              <button id="chat-clear" class="btn btn-info disabled" type="button" onclick="deleteActiveFlow()">
+                  Delete
+                </button>
+            </div>
+          </div>
+        </div>
+          <div class="row testflow-toolbar-row">
+              <div class="col-sm-12">
+                  <div class="btn-group chat-toolbar" role="group" aria-label="...">
+                      <button class="btn btn-info test_flow" type="button" onclick="testFlow()" title="testFlow">
+                          Test Flow &raquo;
+                      </button>
+                  </div>
+              </div>
+          </div>
+        <div class="row testflow-toolbar-row">
+          <div class="col-sm-12">
+            <div class="btn-group chat-toolbar" role="group" aria-label="...">
+              <button class="btn btn-info create_save_flow" type="button" onclick="create_save_flow()" title="createNewFlow">
+                  Create New Flow &raquo;
                 </button>
             </div>
           </div>
         </div>
         <div class="row chat-window-row">
+
           <div class="col-md-12">
-            <a class="btn create_save_flow" href="#" onclick="create_save_flow()" title="createNewFlow">Create New Flow &raquo;</a>
+            <!-- <a class="btn create_save_flow" href="#" onclick="create_save_flow()" title="createNewFlow">Create New Flow &raquo;</a> -->
             <!--loop -->
             <% for( var i=0;i < locals.flowIds.length;i++) {%>
-            <a class="list-group-item" onclick="viewFlowById('<%= locals.flowIds[i] %>')" href="#" title="View <%= locals.flowIds[i] %>">
-                <%= locals.flowIds[i] %>
+              <a class="list-group-item" onclick="viewFlowById('<%= locals.flowIds[i].key %>')" href="#" title="View <%= locals.flowIds[i].key %>">
+                <%= locals.flowIds[i].key %> 
+                <% if(locals.flowIds[i].status == 'saved') { %>
+                  <span>📁  </span>
+                <% } else{ %>
+                  <span>✍️ </span>
+                <% } %>
               </a>
-            <% } %>
+              <% } %>
           </div>
         </div>
       </div>
@@ -65,7 +95,7 @@
         <div class="row chat-window-toolbar-row">
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control inputSenderId" placeholder="senderId" aria-label="senderId">
+              <input type="text" class="form-control inputSenderId" title="senderId" placeholder="senderId" aria-label="senderId">
               <span class="input-group-btn">
                 <button class="btn validSenderId" title="required" type="button">✅</button>
               </span>
@@ -73,7 +103,7 @@
           </div>
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control inputPageId" placeholder="pageId" aria-label="pageId">
+              <input type="text" class="form-control inputPageId" title="pageId" placeholder="pageId" aria-label="pageId">
               <span class="input-group-btn">
                 <button class="btn validPageId" title="required" type="button">✅</button>
               </span>
@@ -83,7 +113,7 @@
         <div class="row chat-window-toolbar-row">
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control inputAppId" placeholder="appId" aria-label="appId">
+              <input type="text" class="form-control inputAppId" title="appId" placeholder="appId" aria-label="appId">
               <span class="input-group-btn">
                 <button class="btn validAppId" title="required" type="button">✅</button>
               </span>
@@ -91,7 +121,7 @@
           </div>
           <div class="col-md-6 col-6 ">
             <div class="input-group">
-              <input type="text" class="form-control inputFlowId" placeholder="flowId" aria-label="flowId">
+              <input type="text" class="form-control inputFlowId" title="flowId" placeholder="flowId" aria-label="flowId">
               <span class="input-group-btn">
                 <button class="btn validFlowId" title="optional" type="button">✅</button>
               </span>
@@ -101,13 +131,13 @@
         <div class="row chat-window-toolbar-row">
           <div class="col-md-12">
             <div class="input-group">
-              <textarea type="text" class="form-control inputFlowDescription" placeholder="Description..." aria-label="flowDescription"></textarea>
+              <textarea type="text" class="form-control inputFlowDescription" title="Description" placeholder="Description..." aria-label="flowDescription"></textarea>
               <span class="input-group-btn">
                 <button class="btn validFlowDescription" title="optional" type="button">✍</button>
               </span>
             </div>
             <div style="text-align: center;">
-                <button class="btn btn-secondary edit_update_flowInfo" href="#" title = "create" onclick="edit_update_flowInfo()" role="save">Update details &raquo;</button>
+              <button class="btn btn-secondary edit_update_flowInfo" href="#" title="create" onclick="edit_update_flowInfo()" role="save">Update details &raquo;</button>
             </div>
           </div>
         </div>

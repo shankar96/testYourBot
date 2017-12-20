@@ -8,129 +8,7 @@ var Promise = require('bluebird')
 const mocha = require('mocha');
 const chai = require('chai');
 var should = chai.should();
-
-var flows = {
-    flow1: [
-        {
-            type: "text",
-            text: "multiple_message",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: "bot:flow1 hi1"
-        }, {
-            type: "text",
-            text: "hi22",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: "bot:flow1 hi2"
-        }, {
-            type: "text",
-            text: "multiple_message",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: [
-                {
-                    "text": "message1"
-                }, {
-                    "text": "message2"
-                }
-            ]
-        }],
-    flow2: [
-        {
-            type: "text",
-            text: "multiple_message",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: "bot:flow1 hi3"
-        }
-    ],
-    "flow_1511279317574": {
-        "createdTime": "Date:-Tue Nov 21 2017 21:18:37 GMT+0530 (IST)  Timestamp:- 1511279317577",
-        "description": "Empty Description...",
-        "senderId": "1",
-        "pageId": "2",
-        "appId": "3",
-        "flow": [
-            {
-                "query": {
-                    "type": "text",
-                    "text": "hi"
-                },
-                "response": [
-                    {
-                        "recipient": {
-                            "id": "1"
-                        },
-                        "message": {
-                            "text": "bot:-hi"
-                        }
-                    }
-                ]
-            },
-            {
-                "query": {
-                    "type": "text",
-                    "text": "multiple_message"
-                },
-                "response": [
-                    {
-                        "recipient": {
-                            "id": "1"
-                        },
-                        "message": {
-                            "text": "message1"
-                        }
-                    },
-                    {
-                        "recipient": {
-                            "id": "1"
-                        },
-                        "message": {
-                            "text": "message2"
-                        }
-                    }
-                ]
-            }
-        ],
-        "flowId": "flow_1511279317574",
-        "savedTime": "Date:-Tue Nov 21 2017 21:20:42 GMT+0530 (IST)  Timestamp:- 1511279442021"
-    },
-    flow3: [
-        {
-            type: "text",
-            text: "multiple_message",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: "bot:flow1 hi1"
-        }, {
-            type: "text",
-            text: "hi223",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: "bot:flow1 hi2"
-        }, {
-            type: "text",
-            text: "multiple_message",
-            senderId: "senderId",
-            pageId: "pageId",
-            appId: "appId",
-            response: [
-                {
-                    "text": "message1"
-                }, {
-                    "text": "message2"
-                }
-            ]
-        }],
-
-}
+var cachePageId ={}
 let clientMessageFormat = {
     type: "text",
     text: "hi",
@@ -138,26 +16,67 @@ let clientMessageFormat = {
     pageId: "pageId",
     appId: "appId",
 }
+function testResponse(botResponse, savedResponse) {
+    botResponse.should.to.be.a('Array')
+    botResponse.length.should.to.be.equal(savedResponse.length)
+    for (let i = 0; i < botResponse.length; i++) {
+        botResponse[i].recipient.should.to.be.a('object');
+        botResponse[i].recipient.id.should.to.be.a('string');
+        botResponse[i].message.should.to.be.a('object');
+        Object.keys(botResponse[i].message).should.be.deep.equal(Object.keys(savedResponse[i].message))
+        if(botResponse[i].message.attachment){
+          Object.keys(botResponse[i].message.attachment).should.be.deep.equal(Object.keys(savedResponse[i].message.attachment))
 
-function checkEachMessage(clientMessageFormat, index, flowId, cb) {
-    it('Testing Flow => <' + flowId + ', message ' + index + '>', function (done) {
+          if(botResponse[i].message.attachment.payload){
+            Object.keys(botResponse[i].message.attachment.payload).should.be.deep.equal(Object.keys(savedResponse[i].message.attachment.payload))
+          }
+        }
+        //all tests
+    }
+}
+function checkEachMessage(clientMessageFormat, index, flowId, savedResponse, cb) {
+    describe('Testing Flow => <' + flowId + ', message {' + index + '}>', function () {
+      let info = {};//TO add extra info about tests.
+      info['function'] = 'checkEachMessage';
+      info['clientMessageFormat'] = clientMessageFormat;
+      let responseFb = {};
+      beforeEach('before Each',function (done) {
+        if(!cachePageId[clientMessageFormat.pageId]){// set Timeout
+          cachePageId[clientMessageFormat.pageId] = clientMessageFormat.pageId
+          this.timeout(50000);
+          info["timeoutSet"]=50000;
+          info["timeoutSet_"]="timeout is set to 50 seconds because during initialization it takes time and we are also noting responsetime"
+        } else{
+          // bot may respond late so at max timeout 10 second and we are also noting responsetime
+          cachePageId[clientMessageFormat.pageId] = clientMessageFormat.pageId
+          this.timeout(30000);
+          info["timeoutSet"]=30000;
+          info["timeoutSet_"]="bot may respond late so at max timeout 30 second and we are also noting responsetime"
+        }
+        let currTime = new Date().getTime();
         fbClient.sendMessageToFbServer(clientMessageFormat, function (response) {
-            if (response.err) {
-                log.info("Error", response.err);
-                cb(false)
-                done()
-            } else {
-                log.info("\tResponse From bot via Fbserver", response);
-                response.should.to.be.a('Array')
-                for (let i = 0; i < response.length; i++) {
-                    response[i].recipient.should.to.be.a('object');
-                    response[i].recipient.id.should.to.be.a('string');
-                    //all tests
-                }
-                cb(true)
-                done();
-            }
-        })
+          responseFb = response;
+          info['responseTime'] = (new Date().getTime() - currTime);
+          done()
+        });
+      })
+      it('Testing Flow => <' + flowId + ', message {' + index + '}>', function () {
+        let response = responseFb
+        if (response.err) {
+          this._runnable.info = info;
+          log.error("Error in sendMessageToFbServer", response.err);
+          this._runnable.info["err"] = response.err;
+          cb()
+        } else {
+          this._runnable.info = info;
+          // TODO Test Logic on each Message
+          log.info("\tResponse From bot via Fbserver", response);
+          this._runnable.info["response"]=response;
+          this._runnable.info["savedResponse"]=savedResponse;
+          testResponse(response, savedResponse);
+          cb()
+        }
+      })
     })
 }
 
@@ -174,25 +93,34 @@ function checkEachFlow(flowInfo) {
                             pageId: flowInfo.pageId,
                             appId: flowInfo.appId,
                         }
-                        checkEachMessage(clientMessageFormat, index, flowInfo.flowId, function () {
+                        let savedResponse = flowInfo.flow[index].response;
+                        checkEachMessage(clientMessageFormat, index, flowInfo.flowId, savedResponse, function () {
                             resolve();
                             if (index + 1 == flowInfo.flow.length) {
-                                resolveAll('done....')
+                                resolveAll()
                             }
                         })
                     } catch (err) {
+                      it('Error in Flow => <' + flowInfo.flowId + ', message {' + index + '}>', function () {
+                        this._runnable.info={};
+                        this._runnable.info["function"]='checkEachFlow';
+                        this._runnable.info["err"]=err;
                         log.error("Error:-", err, "In processing TestData", flowInfo.flow[index])
                         resolve();
+                        if (index + 1 == flowInfo.flow.length) {
+                          resolveAll()
+                        }
+                      })
                     }
                 })
             }, Promise.resolve())
         })
     })
 }
-checkEachFlow(flows['flow_1511279317574'])
-.then((status) => {
-    console.log("flow resolved", status)
-})
+// checkEachFlow(flows['flow_1511279317574'])
+//     .then((status) => {
+//         console.log("flow resolved", status)
+//     })
 // describe('', function () {
 //     it('', function () {
 
@@ -207,10 +135,10 @@ function checkMultipleFlowSync(flows) {
                 return new Promise((resolve, reject) => {
                     console.log(flowInfo, index)
                     checkEachFlow(flows[flowInfo])
-                        .then((status) => {
+                        .then(() => {
                             resolve();
                             if (index + 1 == Object.keys(flows).length) {
-                                resolveAll("done....")
+                                resolveAll()
                             }
                         })
                 })
@@ -222,35 +150,60 @@ function checkMultipleFlowSync(flows) {
 // .then((status)=>{
 //     console.log("All flow resolved ",status)
 // })
+// setTimeout()
 
 function checkFlowsFromFbTestData(flowId) {
+    log.info("checkFlowsFromFbTestData",flowId);
     return new Promise((resolve, reject) => {
         describe('reading testData from ' + fbTestDataFile, function () {
-            it('Test started reading', function (done) {
-                testUtils.readTestFile(fbTestDataFile)
-                    .then((data) => {
-                        done();
-                        data = JSON.parse(data);
-                        let flows = data.testData.flows;
-                        if (flowId) {
-                            flows = {
-                                [flowId]: data.testData.flows[flowId]
-                            }
-                        }
-                        describe('reading done..',function(){
-                        it('Test completed reading', function () { })})
-                        // console.log('checkFlowsFromFbTestData',flows)
-                        checkMultipleFlowSync(flows)
-                            .then((status) => {
-                                resolve(status)
-                                console.log("All flow resolved", status)
-                            })
-                    }).catch((err) => {
-                        reject(err)
-                    })
+          let testDataContent = {};
+          let flag = false;
+          before('',function (done) {
+            testUtils.readTestFile(fbTestDataFile)
+              .then((data)=>{
+                testDataContent = data;
+                flag = true;
+                done()
+              }).catch((err)=>{
+              testDataContent = err;
+                done()
             })
+          })
+          it('processing Of testFile...',function () {
+            if(flag){
+              let data = JSON.parse(testDataContent);
+              let flows = data.testData.flows;
+              if (flowId) {
+                if(data.testData.flows[flowId]) {
+                  flows = {
+                    [flowId]: data.testData.flows[flowId]
+                  }
+                } else {
+                  flag = false;
+                }
+              }
+              this._runnable.info={};
+              this._runnable.info['file'] = fbTestDataFile;
+              this._runnable.info['function'] = 'checkFlowsFromFbTestData';
+              if(flag) {
+                checkMultipleFlowSync(flows)
+                  .then((status) => {
+                    resolve(status)
+                    console.log("All flow resolved", status)
+                  })
+              }else{
+                this._runnable.info['err'] = "No such flowId is present in test data make sure to save it before testing"
+              }
+            }else{
+              this._runnable.info={}
+              this._runnable.info['err'] = testDataContent;
+            }
+          })
         })
     })
+}
+if(process.env.AUTOMATED_TESTING){
+  checkFlowsFromFbTestData(process.env.flowId)
 }
 module.exports = {
     checkMultipleFlowSync,

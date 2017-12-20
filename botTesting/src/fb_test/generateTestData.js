@@ -1,3 +1,4 @@
+"use strict";
 var Promise = require('bluebird');
 var testUtils = require('../utils/testUtils')
 var log = require('../utils/logger')
@@ -153,8 +154,8 @@ function updateKeyPairById(flowId, keyPair) {
             let success = true;
             if (Object.keys(keyPair).indexOf('flowId') > -1) {
                 let data = JSON.parse(JSON.stringify(activeFlow[flowId]));
-                if(keyPair['flowId']==""){
-                    keyPair['flowId'] = 'flowId_'+new Date().getTime();
+                if (keyPair['flowId'] == "") {
+                    keyPair['flowId'] = 'flowId_' + new Date().getTime();
                 }
                 // delete activeFlow[flowId];//delete old FlowId and data// mostly we should delete it
                 if (activeFlow[keyPair['flowId']]) {
@@ -169,7 +170,7 @@ function updateKeyPairById(flowId, keyPair) {
 
             }
             if (success == true) {
-                for (key in keyPair) {
+                for (let key in keyPair) {
                     if (key != 'flowId') {
                         updatedPair.push(key + ' changed from ' + activeFlow[flowId][key] + " to " + keyPair[key]);
                         activeFlow[flowId][key] = keyPair[key];
@@ -178,11 +179,11 @@ function updateKeyPairById(flowId, keyPair) {
                 }
                 let newFlowId = keyPair['flowId'] ? keyPair['flowId'] : flowId;
                 console.log("cache file....", activeFlow);
-                resolve({ success, updatedPair, message: "updated in cache..", oldFlowId, newFlowId,keyPair })
-            }else{
-                resolve({ success, updatedPair, message: "couldn't update because there is already an active flow with same flowId try with Other flowId"})
+                resolve({ success, updatedPair, message: "updated in cache..", oldFlowId, newFlowId, keyPair })
+            } else {
+                resolve({ success, updatedPair, message: "couldn't update because there is already an active flow with same flowId try with Other flowId" })
             }
-            
+
         } else {
             //loading flowId in Cache
             testUtils.readTestFile(fbTestDataFile)
@@ -219,6 +220,7 @@ function deleteFlowById(flowId, from) {
             delete activeFlow[flowId];
             resolve({ success: true, message: "removed from activeFlow.." });
         } else {
+
             testUtils.readTestFile(fbTestDataFile)
                 .then((data) => {
                     data = JSON.parse(data)
@@ -251,9 +253,13 @@ function viewFlowById(flowId) {
                     data = JSON.parse(data);
                     if (data.testData && data.testData.flows) {
                         flow = data.testData.flows[flowId];
-                        resolve({ success: true, flow, message: "viewing from file..." })
+                        if (flow) {
+                            resolve({ success: true, flow, message: "viewing from file..." })
+                        } else {
+                            resolve({ success: false, err: "404", message: "Not found such flow" })
+                        }
                     } else {
-                        resolve({ success:false, message: "No such Flow Found...." })
+                        resolve({ success: false, message: "No such Flow Found...." })
                     }
                 }).catch((err) => {
                     reject({ success: false, err, message: "Error in viewFlowById" });
@@ -266,22 +272,50 @@ function viewAllFlowId() {
     return new Promise((resolve, reject) => {
         testUtils.readTestFile(fbTestDataFile)
             .then((data) => {
-                let flowIds1 = [], flowIds2 = []
+                let flowIds1 = [], flowIds2 = [], flowIdsInfo = []
                 data = JSON.parse(data)
                 if (data.testData && data.testData.flows) {
                     flowIds1 = Object.keys(data.testData.flows);
                 }
                 flowIds2 = Object.keys(activeFlow);
-                for(let key of flowIds2){
-                    if(flowIds1.indexOf(key)<0){
-                        flowIds1.push(key);
+                for (let key of flowIds1){
+                    flowIdsInfo.push({key,"status":"saved"})
+                }
+                for (let key of flowIds2) {
+                    if (flowIds1.indexOf(key) < 0) {
+                        flowIdsInfo.push({key,"status":"cached"})
                     }
                 }
-                resolve({ success: true, flowIds: flowIds1, message: "viewing from file and activeFlow" })
+                console.log(flowIds1,flowIds2,flowIdsInfo)
+                resolve({ success: true, flowIds: flowIdsInfo, message: "viewing from file and activeFlow" })
             }).catch((err) => {
                 reject({ success: false, err, message: "Error in readingTestFile in viewAllFlowId" })
             })
     })
+}
+/**
+ * return senderId pageId and appId from flowData
+ */
+function getCustomFlowInfo() {
+  return new Promise((resolve,reject)=>{
+    testUtils.readTestFile(fbTestDataFile)
+      .then((data)=>{
+        data = JSON.parse(data);
+        let flowIds=[]
+        if (data.testData && data.testData.flows) {
+          flowIds = Object.keys(data.testData.flows);
+        }
+        if(flowIds.length>0){
+          let flow = data.testData.flows[flowIds[Math.floor(Math.random()*flowIds.length)]]
+          resolve({senderId:flow.senderId,pageId:flow.pageId,appId:flow.appId,"length":flowIds.length})
+        }else{
+          resolve({senderId:"",pageId:"",appId:"","length":flowIds.length})
+        }
+      }).catch((err)=>{
+      log.info("Error in getCustomFlowInfo",err)
+      resolve({senderId:"",pageId:"",appId:"",err})
+    })
+  })
 }
 module.exports = {
     saveActiveFlowById,
@@ -291,5 +325,6 @@ module.exports = {
     viewFlowById,
     deleteFlowById,
     viewAllFlowId,
-    activeFlow
+    activeFlow,
+    getCustomFlowInfo
 }

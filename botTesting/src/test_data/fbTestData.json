@@ -1,101 +1,151 @@
 {
 	"testData": {
 		"flows": {
-			"1": {
-				"flowId": "1",
-				"createdTime": "Date:-Fri Nov 24 2017 21:31:32 GMT+0530 (IST)  Timestamp:- 1511539292821",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [],
-				"savedTime": "Date:-Fri Nov 24 2017 21:31:35 GMT+0530 (IST)  Timestamp:- 1511539295174"
-			},
-			"11": {
-				"flowId": "11",
-				"createdTime": "Date:-Fri Nov 24 2017 21:33:40 GMT+0530 (IST)  Timestamp:- 1511539420418",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
+			"payBillFlow": {
+				"flowId": "payBillFlow",
+				"createdTime": "Date:-Tue Dec 19 2017 13:55:22 GMT+0530 (IST)  Timestamp:- 1513671922624",
+				"description": "pay bill flow ",
+				"senderId": "1586711078087024",
+				"pageId": "202153767012429",
+				"appId": "216838955439477",
 				"flow": [
 					{
 						"query": {
 							"type": "text",
-							"text": "hi"
+							"text": "pay my bill"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "bot:-hi"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Fri Nov 24 2017 21:33:52 GMT+0530 (IST)  Timestamp:- 1511539432286"
-			},
-			"flow_1511279317574": {
-				"createdTime": "Date:-Tue Nov 21 2017 21:18:37 GMT+0530 (IST)  Timestamp:- 1511279317577",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "2",
-				"appId": "3",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hi"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-hi"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "multiple_message"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "message1"
+									"text": "Pick or enter the amount you would like to pay."
 								}
 							},
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "message2"
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "Current Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$2,562.00",
+															"payload": "current balance"
+														}
+													]
+												},
+												{
+													"title": "Min Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$54.00",
+															"payload": "min balance"
+														}
+													]
+												},
+												{
+													"title": "Current Statement Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$692.00",
+															"payload": "current statement balance"
+														}
+													]
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "current balance"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "When would you like to pay?"
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "now"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "button",
+											"text": "You are about to pay $2,562.00 using your funding account Ella2 chase (xxxxx0021) on 12/19/2017. Please note that you'll be charged an additional amount of $3.00 towards convenience fee. The total payment is $2,565.00. Shall I go ahead and confirm that?",
+											"buttons": [
+												{
+													"type": "postback",
+													"title": "Pay",
+													"payload": "pay"
+												},
+												{
+													"type": "postback",
+													"title": "Cancel",
+													"payload": "cancel"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "sure"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Great, you just chatted your way through a payment! :) Your payment reference is 57YD9T3XWL. Can I help you with anything else today?"
 								}
 							}
 						]
 					}
 				],
-				"flowId": "flow_1511279317574",
-				"savedTime": "Date:-Tue Nov 21 2017 21:20:42 GMT+0530 (IST)  Timestamp:- 1511279442021"
+				"savedTime": "Date:-Tue Dec 19 2017 13:56:47 GMT+0530 (IST)  Timestamp:- 1513672007232"
 			},
-			"DescriptiveFlow1": {
-				"flowId": "DescriptiveFlow1",
-				"createdTime": "Date:-Wed Nov 22 2017 14:08:49 GMT+0530 (IST)  Timestamp:- 1511339929810",
-				"description": "this flow id is descriptive containing all type of txt message for fb",
-				"senderId": "sender1",
-				"pageId": "2",
-				"appId": "124345455",
+			"transactionDetails": {
+				"flowId": "transactionDetails",
+				"createdTime": "Date:-Tue Dec 19 2017 15:08:40 GMT+0530 (IST)  Timestamp:- 1513676320667",
+				"description": "transaction flow",
+				"senderId": "1586711078087024",
+				"pageId": "202153767012429",
+				"appId": "216838955439477",
 				"flow": [
 					{
 						"query": {
@@ -105,10 +155,30 @@
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "bot:-hi"
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
 								}
 							}
 						]
@@ -116,136 +186,54 @@
 					{
 						"query": {
 							"type": "text",
-							"text": "multiple_message"
+							"text": "get transaction details"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "message1"
+									"text": "Here are 4 transactions beginning with the most recent from 12/19/2017 to 12/19/2017 "
 								}
 							},
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "message2"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "postback",
-							"text": "pay"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-pay"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "quick_replies",
-							"text": "pay"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-quick replies title"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Wed Nov 22 2017 14:16:24 GMT+0530 (IST)  Timestamp:- 1511340384694"
-			},
-			"flow_1511533468430": {
-				"flowId": "flow_1511533468430",
-				"createdTime": "Date:-Fri Nov 24 2017 19:54:28 GMT+0530 (IST)  Timestamp:- 1511533468430",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hi"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-hi"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Fri Nov 24 2017 19:54:43 GMT+0530 (IST)  Timestamp:- 1511533483591"
-			},
-			"flow_1511534145518": {
-				"flowId": "flow_1511534145518",
-				"createdTime": "Date:-Fri Nov 24 2017 20:06:50 GMT+0530 (IST)  Timestamp:- 1511534210977",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hghbjfbjhdfbdbhfbhgf"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-hghbjfbjhdfbdbhfbhgf"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Fri Nov 24 2017 20:07:08 GMT+0530 (IST)  Timestamp:- 1511534228656"
-			},
-			"flow_1511538843904": {
-				"flowId": "flow_1511538843904",
-				"createdTime": "Date:-Fri Nov 24 2017 21:24:03 GMT+0530 (IST)  Timestamp:- 1511538843904",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "ok"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-ok"
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 57YD9T3XWL\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: DT0MXCQ5P4\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: D1GH0S0V4G\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
 								}
 							}
 						]
@@ -253,15 +241,34 @@
 					{
 						"query": {
 							"type": "text",
-							"text": "ok"
+							"text": "get details of FDN5DY79QS"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "bot:-ok"
+									"text": "Here is 1 transaction beginning with the most recent from 12/19/2017 to 12/19/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											]
+										}
+									}
 								}
 							}
 						]
@@ -269,104 +276,21 @@
 					{
 						"query": {
 							"type": "text",
-							"text": "great"
+							"text": "thanks"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "bot:-great"
+									"text": "Anytime. That's what I'm here for."
 								}
 							}
 						]
 					}
 				],
-				"savedTime": "Date:-Fri Nov 24 2017 21:24:20 GMT+0530 (IST)  Timestamp:- 1511538860972"
-			},
-			"flow_1511539158096": {
-				"flowId": "flow_1511539158096",
-				"createdTime": "Date:-Fri Nov 24 2017 21:29:18 GMT+0530 (IST)  Timestamp:- 1511539158096",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hi"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-hi"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "cool"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-cool"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Fri Nov 24 2017 21:29:44 GMT+0530 (IST)  Timestamp:- 1511539184382"
-			},
-			"flow_1511539333667": {
-				"flowId": "flow_1511539333667",
-				"createdTime": "Date:-Fri Nov 24 2017 21:32:13 GMT+0530 (IST)  Timestamp:- 1511539333667",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [],
-				"savedTime": "Date:-Fri Nov 24 2017 21:32:22 GMT+0530 (IST)  Timestamp:- 1511539342528"
-			},
-			"flow_1511539403216": {
-				"flowId": "flow_1511539403216",
-				"createdTime": "Date:-Fri Nov 24 2017 21:33:23 GMT+0530 (IST)  Timestamp:- 1511539403216",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [],
-				"savedTime": "Date:-Fri Nov 24 2017 21:33:24 GMT+0530 (IST)  Timestamp:- 1511539404756"
-			},
-			"flow_1511540382577": {
-				"flowId": "flow_1511540382577",
-				"createdTime": "Date:-Fri Nov 24 2017 21:49:42 GMT+0530 (IST)  Timestamp:- 1511540382577",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [],
-				"savedTime": "Date:-Fri Nov 24 2017 21:50:22 GMT+0530 (IST)  Timestamp:- 1511540422135"
-			},
-			"flow_1511540686339": {
-				"flowId": "flow_1511540686339",
-				"createdTime": "Date:-Fri Nov 24 2017 21:54:46 GMT+0530 (IST)  Timestamp:- 1511540686339",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [],
-				"savedTime": "Date:-Fri Nov 24 2017 21:54:55 GMT+0530 (IST)  Timestamp:- 1511540695944"
+				"savedTime": "Date:-Tue Dec 19 2017 15:24:22 GMT+0530 (IST)  Timestamp:- 1513677262723"
 			}
 		}
 	},

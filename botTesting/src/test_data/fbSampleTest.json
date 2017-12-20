@@ -1,78 +1,152 @@
 {
-	"testData": {
-		"flows": {
-			"flowId": {
-				"description": "",
-				"flow": []
-			},
-			"ok": {
-				"someData1511182751070": 1511182751071
-			},
-			"ok1": {
-				"someData1511182779658": 1511182779658
-			},
-			"ok3": {
-				"someData1511182784015": 1511182784015
-			},
-			"flow_1511279317574": {
-				"createdTime": "Date:-Tue Nov 21 2017 21:18:37 GMT+0530 (IST)  Timestamp:- 1511279317577",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "2",
-				"appId": "3",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hi"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "bot:-hi"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "multiple_message"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "message1"
-								}
-							},
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "message2"
-								}
-							}
-						]
-					}
-				],
-				"flowId": "flow_1511279317574",
-				"savedTime": "Date:-Tue Nov 21 2017 21:20:42 GMT+0530 (IST)  Timestamp:- 1511279442021"
-			}
-		}
-	},
-	"testSuite": {
-		"testSuiteId": {
-			"flowsId": {
-				"description": "",
-				"flow": []
-			}
-		}
-	}
+  "testData": {
+    "flows": {
+      "payBillFlow": {
+        "flowId": "payBillFlow",
+        "createdTime": "Date:-Tue Dec 19 2017 13:55:22 GMT+0530 (IST)  Timestamp:- 1513671922624",
+        "description": "pay bill flow ",
+        "senderId": "1586711078087024",
+        "pageId": "202153767012429",
+        "appId": "216838955439477",
+        "flow": [
+          {
+            "query": {
+              "type": "text",
+              "text": "pay my bill"
+            },
+            "response": [
+              {
+                "recipient": {
+                  "id": "1586711078087024"
+                },
+                "message": {
+                  "text": "Pick or enter the amount you would like to pay."
+                }
+              },
+              {
+                "recipient": {
+                  "id": "1586711078087024"
+                },
+                "message": {
+                  "attachment": {
+                    "type": "template",
+                    "payload": {
+                      "template_type": "generic",
+                      "elements": [
+                        {
+                          "title": "Current Balance",
+                          "buttons": [
+                            {
+                              "type": "postback",
+                              "title": "$2,562.00",
+                              "payload": "current balance"
+                            }
+                          ]
+                        },
+                        {
+                          "title": "Min Balance",
+                          "buttons": [
+                            {
+                              "type": "postback",
+                              "title": "$54.00",
+                              "payload": "min balance"
+                            }
+                          ]
+                        },
+                        {
+                          "title": "Current Statement Balance",
+                          "buttons": [
+                            {
+                              "type": "postback",
+                              "title": "$692.00",
+                              "payload": "current statement balance"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "query": {
+              "type": "text",
+              "text": "current balance"
+            },
+            "response": [
+              {
+                "recipient": {
+                  "id": "1586711078087024"
+                },
+                "message": {
+                  "text": "When would you like to pay?"
+                }
+              }
+            ]
+          },
+          {
+            "query": {
+              "type": "text",
+              "text": "now"
+            },
+            "response": [
+              {
+                "recipient": {
+                  "id": "1586711078087024"
+                },
+                "message": {
+                  "attachment": {
+                    "type": "template",
+                    "payload": {
+                      "template_type": "button",
+                      "text": "You are about to pay $2,562.00 using your funding account Ella2 chase (xxxxx0021) on 12/19/2017. Please note that you'll be charged an additional amount of $3.00 towards convenience fee. The total payment is $2,565.00. Shall I go ahead and confirm that?",
+                      "buttons": [
+                        {
+                          "type": "postback",
+                          "title": "Pay",
+                          "payload": "pay"
+                        },
+                        {
+                          "type": "postback",
+                          "title": "Cancel",
+                          "payload": "cancel"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "query": {
+              "type": "text",
+              "text": "sure"
+            },
+            "response": [
+              {
+                "recipient": {
+                  "id": "1586711078087024"
+                },
+                "message": {
+                  "text": "Great, you just chatted your way through a payment! :) Your payment reference is 57YD9T3XWL. Can I help you with anything else today?"
+                }
+              }
+            ]
+          }
+        ],
+        "savedTime": "Date:-Tue Dec 19 2017 13:56:47 GMT+0530 (IST)  Timestamp:- 1513672007232"
+      }
+    }
+  },
+  "testSuite": {
+    "testSuiteId": {
+      "flowsId": {
+        "description": "",
+        "flow": []
+      }
+    }
+  }
 }

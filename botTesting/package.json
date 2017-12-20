@@ -4,10 +4,12 @@
   "description": "",
   "main": "./src/test.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha ./src/test.js",
-    "start": "node ./src/webapp/app.js",
+    "test": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node_modules/.bin/mocha ./src/test.js",
+    "start": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node ./src/webapp/app.js",
     "cliFb": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node ./src/fb_test/cli.js",
-    "webTest": "node_modules/.bin/mocha ./src/webapp/app.js"
+    "webTest": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node ./src/test.js",
+    "testLogs": "tailf logs/test.log | ./node_modules/bunyan/bin/bunyan",
+    "logs": "tailf logs/ella.log | ./node_modules/bunyan/bin/bunyan"
   },
   "keywords": [
     "Facebook Bot",
@@ -22,12 +24,14 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
+    "bunyan": "^1.8.12",
     "chai": "^4.1.2",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "mocha": "^4.0.1",
     "nock": "^9.1.0",
     "request": "^2.83.0",
+    "showdown": "^1.8.5",
     "socket.io": "^2.0.4"
   }
 }

@@ -110,6 +110,7 @@ function getReplyMessage(msg, type) {
 }
 function updateReplyMessage(msg) {
     enableInput();// enable typing after response
+
     $('.message.loading').remove();
     $(` 
     <div class="message new">
