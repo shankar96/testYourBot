@@ -332,13 +332,15 @@ function testedFlow(info) {
   var pass = 0;
   var failed = 0;
   for(let key in info){
-    if(info[key].state === 'passed'){
-      pass++;
-    }else{
-      failed++;
-    }
+      for(let key1 in info[key]){
+        if(info[key][key1].state === 'passed'){
+            pass++;
+        }else{
+            failed++;
+        }
+      }
   }
-  alertInfo("Info!","<span>Total messages tested => "+Object.keys(info).length+"</span><br/><span style='color: green;'> Passed Test "+pass+"</span><br/><span style='color: red'>  failed test "+failed+"</span>")
+  alertInfo("Info!","<span>Total Flows tested => "+Object.keys(info).length+"</span><br/><span style='color: green;'> Passed Test "+pass+"</span><br/><span style='color: red'>  failed test "+failed+"</span>")
 }
 
 function testingInfo(info) {
@@ -352,11 +354,18 @@ function testingInfo(info) {
     alertDanger("Danger!",title)
   }
   showOuterHint({
-    innerHTML:"Testing in process => {"+activeFlow.flowId+"} <br/>"
+    innerHTML:"Testing in process => {"+info.flowId+"} <br/>"
               +title
               +"<pre>"+JSON.stringify(info, null, '  ').replace("<","&lt;").replace(">","&gt;")+"</pre>"
   })
 
+}
+function testAllFlow(){
+    console.log("Testing all flow")
+    alertInfo("Info!","testing of All flow")
+    socket.emit('testFlowById',{})
+    hideFlowWindow();
+    showOuterHint({innerHTML:"testing Of All Flow"})
 }
 function testFlow() {
   if (Object.keys(activeFlow).length > 0) {
@@ -369,7 +378,8 @@ function testFlow() {
 
   } else {
     console.log("No active Flow to test");
-    alertWarning("Warning!","There is no active flow to test..")
+    alertWarning("Warning!",`<span> click here if you like to test all flow</span>
+    <button class="btn btn-info" onclick="testAllFlow()"> Test All FLows</button>`)
   }
 }
 function setCustomFlowInfo() {

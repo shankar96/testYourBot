@@ -66,7 +66,6 @@ function addToActiveFlowById(flowId, data) {
 
 function saveActiveFlowById(flowId) {
     return new Promise((resolve, reject) => {
-
         testUtils.readTestFile(fbTestDataFile)
             .then((data) => {
                 data = JSON.parse(data);
@@ -76,16 +75,20 @@ function saveActiveFlowById(flowId) {
                 if (!data.testData.flows) {
                     data.testData.flows = {}
                 }
-                activeFlow[flowId].savedTime = "Date:-" + new Date() + "  Timestamp:- " + new Date().getTime();
-                data.testData.flows[flowId] = activeFlow[flowId];
-                // console.log(data, JSON.stringify(data))
-                testUtils.writeTestFile(fbTestDataFile, JSON.stringify(data, null, '\t'))
-                    .then((resp) => {
-                        delete activeFlow[flowId];// remove from activeFlow
-                        resolve({ success: true, resp, message: "successfully saved in file.." })
-                    }).catch((err) => {
-                        reject({ success: false, err, message: "Error in writeTestFile in saveActiveFlowById.." })
-                    })
+                if(activeFlow[flowId]){
+                    activeFlow[flowId].savedTime = "Date:-" + new Date() + "  Timestamp:- " + new Date().getTime();
+                    data.testData.flows[flowId] = activeFlow[flowId];
+                    // console.log(data, JSON.stringify(data))
+                    testUtils.writeTestFile(fbTestDataFile, JSON.stringify(data, null, '\t'))
+                        .then((resp) => {
+                            delete activeFlow[flowId];// remove from activeFlow
+                            resolve({ success: true, resp, message: "successfully saved in file.." })
+                        }).catch((err) => {
+                            reject({ success: false, err, message: "Error in writeTestFile in saveActiveFlowById.." })
+                        })
+                }else{
+                    resolve({ success: false, message: "No such active Flow Exist to save"+flowId })
+                }
 
             }).catch((err) => {
                 reject({ success: false, err, message: "Error in readTestFile in saveActiveFlowById.." })

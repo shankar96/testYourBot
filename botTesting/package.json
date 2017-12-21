@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node_modules/.bin/mocha ./src/test.js",
     "start": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node ./src/webapp/app.js",
-    "cliFb": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node ./src/fb_test/cli.js",
+    "cliFb": "TEST_CLI=fb node ./src/cli.js",
     "webTest": "NODE_PATH=. ELLA_CONF_DIR=../conf/ node ./src/test.js",
     "testLogs": "tailf logs/test.log | ./node_modules/bunyan/bin/bunyan",
     "logs": "tailf logs/ella.log | ./node_modules/bunyan/bin/bunyan"
@@ -33,6 +33,7 @@
     "nock": "^9.1.0",
     "request": "^2.83.0",
     "showdown": "^1.8.5",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   }
 }

@@ -7,7 +7,7 @@ var path = require('path')
 var log = require('../utils/logger')
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
-var REST_PORT = (process.env.PORT || '8888')
+var REST_PORT = (process.env.TEST_PORT || '8888')
 
 appRouter(app);
 app.use(express.static(path.join(__dirname, 'public')));

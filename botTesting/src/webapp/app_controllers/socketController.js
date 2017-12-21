@@ -68,7 +68,7 @@ function getCustomFlowInfo(socket) {
 }
 module.exports = function (io) {
     io.on('connection', function (socket) {
-        log.info('a new user connected');
+        log.info('A new user Connected',socket.id);
         socket.on('disconnect', function (socket) {
             log.info('user disconnected');
         });
@@ -80,7 +80,16 @@ module.exports = function (io) {
             log.info('message: ', flowInfo);
             generateFbTestData.createNewFlow(flowInfo)
                 .then((info) => {
+                    log.info("new_flow_created",info)
                     socket.emit('new_flow_created', info)
+                })
+        });
+        socket.on('viewAllFlowId', function () {
+            log.info('viewAllFlowId: ');
+            generateFbTestData.viewAllFlowId()
+                .then((info) => {
+                    log.info("viewAllFlowId",info)
+                    socket.emit('viewAllFlowId', info)
                 })
         });
         socket.on('update_flowInfo', function (oldFlowInfo, newFlowInfo) {

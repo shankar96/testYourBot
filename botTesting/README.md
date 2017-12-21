@@ -85,9 +85,9 @@ function testResponse(botResponse, savedResponse) {
 * got to botTesting directory and run below command
 
    $myProject/botTesting$ __LOG_TO_FILE=true npm run webTest__
-   
+
    make sure you are not using proxy in terminal
-   
+
    to check proxy run __echo $https_proxy $https_proxy__
     
    if you got something remove proxy by running __export https_proxy=__ and __export https_proxy=__

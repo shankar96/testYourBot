@@ -17,6 +17,12 @@ function pushResults(socket, flowId, test, testResults) {
   if(testResults[messageId]){
     messageId = messageId+"_"+new Date().getTime();
   }
+  if(!flowId){
+    flowId = test.flowId;
+    if(!flowId){
+      flowId = process.env.flowId;
+    }
+  }
   let testResult ={
     title: test.title,
     responseTime,
@@ -30,7 +36,12 @@ function pushResults(socket, flowId, test, testResults) {
     err:test.err
   }
   notifyUsingSocket(socket,'testingInfo',testResult);
-  testResults[messageId] = testResult;
+  if(testResults[flowId]){
+    testResults[flowId][messageId] = testResult;
+  }else{
+    testResults[flowId] = {};
+    testResults[flowId][messageId] = testResult;
+  }
   log.info("results for =>\n"+test.title,testResult);
 
 }
@@ -40,9 +51,9 @@ function fbTests(socket, flowId) {
     path = require('path');
   let mocha = new Mocha();
   let testDir = path.join(__dirname,'/fb_test/fbTest.js');
-  log.info("TestDirecory=>\n",testDir)
   process.env.AUTOMATED_TESTING = true;
   process.env.flowId = flowId;
+  log.info("TestDirecory=>\n",testDir)
   return new Promise((resolve,reject)=>{
     delete require.cache[ testDir ];
     mocha.addFile(testDir);

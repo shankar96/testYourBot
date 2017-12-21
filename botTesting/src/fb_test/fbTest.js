@@ -64,11 +64,13 @@ function checkEachMessage(clientMessageFormat, index, flowId, savedResponse, cb)
         let response = responseFb
         if (response.err) {
           this._runnable.info = info;
+          this._runnable.flowId=flowId;
           log.error("Error in sendMessageToFbServer", response.err);
           this._runnable.info["err"] = response.err;
           cb()
         } else {
           this._runnable.info = info;
+          this._runnable.flowId=flowId;
           // TODO Test Logic on each Message
           log.info("\tResponse From bot via Fbserver", response);
           this._runnable.info["response"]=response;
@@ -82,6 +84,7 @@ function checkEachMessage(clientMessageFormat, index, flowId, savedResponse, cb)
 
 function checkEachFlow(flowInfo) {
     return new Promise((resolveAll, rejectAll) => {
+        process.env.flowId = flowInfo.flowId;// to use when not setted in each test
         describe('Testing Flow => ' + flowInfo.flowId, function () {
             flowInfo.flow.reduce((promiseChain, message, index) => {
                 return new Promise((resolve, reject) => {
@@ -103,6 +106,7 @@ function checkEachFlow(flowInfo) {
                     } catch (err) {
                       it('Error in Flow => <' + flowInfo.flowId + ', message {' + index + '}>', function () {
                         this._runnable.info={};
+                        this._runnable.flowId=flowInfo.flowId;
                         this._runnable.info["function"]='checkEachFlow';
                         this._runnable.info["err"]=err;
                         log.error("Error:-", err, "In processing TestData", flowInfo.flow[index])
@@ -173,7 +177,8 @@ function checkFlowsFromFbTestData(flowId) {
             if(flag){
               let data = JSON.parse(testDataContent);
               let flows = data.testData.flows;
-              if (flowId) {
+              if (flowId!='undefined') {
+                this._runnable.flowId=flowId;
                 if(data.testData.flows[flowId]) {
                   flows = {
                     [flowId]: data.testData.flows[flowId]
@@ -181,8 +186,11 @@ function checkFlowsFromFbTestData(flowId) {
                 } else {
                   flag = false;
                 }
+              } else{
+                this._runnable.flowId="TestAllFlowID";
               }
               this._runnable.info={};
+              
               this._runnable.info['file'] = fbTestDataFile;
               this._runnable.info['function'] = 'checkFlowsFromFbTestData';
               if(flag) {
@@ -203,6 +211,7 @@ function checkFlowsFromFbTestData(flowId) {
     })
 }
 if(process.env.AUTOMATED_TESTING){
+  log.info("flowId to be tested=>\n",process.env.flowId)
   checkFlowsFromFbTestData(process.env.flowId)
 }
 module.exports = {
