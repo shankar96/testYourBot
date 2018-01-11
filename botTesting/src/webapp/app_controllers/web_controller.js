@@ -21,20 +21,42 @@ function extractOverView(data){
   overview.messageByReportId = {};
   overview.passedTestsByReportId = {};
   overview.failedTestsByReportId = {};
+  overview.messageByReportNFlowId = {};
+  overview.passedTestsByReportNFlowId = {};
+  overview.failedTestsByReportNFlowId = {};
+  overview.timeTakenByReportNFlowId = {};
   for(let reportKey in data){
     overview.flowsCount = overview.flowsCount + Object.keys(data[reportKey].report).length;
     let messageCount = 0;
     let passedTests = 0;
     let failedTests = 0;
+    let flag = false;
+    if(Object.keys(data[reportKey].report).length==1){// processing tests is in flowId
+      flag = true;
+    }
     for(let flowsKey in data[reportKey].report){
       messageCount += Object.keys(data[reportKey].report[flowsKey]).length;
+      let passedTestsByFlowId = 0;
+      let failedTestsByFlowId = 0;
+      let timeTaken = 0;
       for(let messageKey in data[reportKey].report[flowsKey]){
+        timeTaken += data[reportKey].report[flowsKey][messageKey].duration + data[reportKey].report[flowsKey][messageKey].responseTime
         if(data[reportKey].report[flowsKey][messageKey].state == 'passed'){
-          passedTests += 1;
+          passedTestsByFlowId += 1;
         } else{
-          failedTests += 1;
+          failedTestsByFlowId += 1;
         }
       }
+      passedTests += passedTestsByFlowId;
+      failedTests += failedTestsByFlowId;
+      if(flag || flowsKey == "TestAllFlowID"){
+        overview.messageByReportNFlowId[reportKey+"_"+flowsKey] = Object.keys(data[reportKey].report[flowsKey]).length-1;
+      } else{
+        overview.messageByReportNFlowId[reportKey + "_" + flowsKey] = Object.keys(data[reportKey].report[flowsKey]).length;
+      }
+      overview.timeTakenByReportNFlowId[reportKey+"_"+flowsKey]= timeTaken;
+      overview.passedTestsByReportNFlowId[reportKey+"_"+flowsKey] = passedTestsByFlowId;
+      overview.failedTestsByReportNFlowId[reportKey+"_"+flowsKey] = failedTestsByFlowId;
     }
     overview.messagesCount += messageCount -1; // 1 for processing file tests
     overview.messageByReportId[reportKey] = messageCount-1; // 1 for processing file tests

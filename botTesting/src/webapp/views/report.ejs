@@ -38,7 +38,53 @@
             font-weight: bolder;
             color: blue;
         }
+        .reportRow, .flowRow{
+            cursor: pointer;
+            text-align: center;
+        }
+        .flowlevelTr,.messageLevelTr{
+            text-align: center;
+        }
 
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        /* The Close Button */
+        #close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #close:hover,
+        #close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
     <script>
         window.onload = function() {
@@ -61,6 +107,65 @@
             });
             chart.render();
 
+        }
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $(".flowLevel").hide();
+            $(".messageLevel").hide();
+            console.log("hide flows");
+            $(".reportRow").click(function () {
+
+                console.log("Clicked reportRow",this)
+                id = $(this).data("href");
+                if ($('tr#' + id).is(":visible")) {
+                    console.log("Here in if")
+                    $('tr#' + id).remove();
+                } else {
+                    $(".flowLevelTr").remove();
+                    console.log("Here in else",$(this).closest('tr'))
+                    $(this).closest('tr').after('<tr class="flowLevelTr" id="' + id + '"><td colspan="6">' + $('#' + id).html() + '</td></tr>');
+                }
+            })
+            $("#close").click(function () {
+                close()
+            })
+
+        });
+        function flowRow(tr) {
+            console.log("Clicked flowRow",tr)
+            id = $(tr).data("href");
+            if ($('tr#' + id).is(":visible")) {
+                console.log("Here in if")
+                $('tr#' + id).remove();
+            } else {
+                $(".messageLevelTr").remove();
+                console.log("Here in else",$(tr).closest('tr'))
+                $(tr).closest('tr').after('<tr class="messageLevelTr" id="' + id + '"><td colspan="6">' + $('#' + id).html() + '</td></tr>');
+            }
+        }
+
+        function messageRow(tr){
+            id = $(tr).data("href");
+            console.log(tr,$('#' + id).html())
+
+            document.getElementById('modalContent').innerHTML = $('#' + id).html()
+            $("#myModal").show();
+
+        }
+        // When the user clicks on <span> (x), close the modal
+        function close() {
+            console.log("Close")
+            $("#myModal").hide();
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            var modal = document.getElementById('myModal');
+
+            if (event.target == modal) {
+                close();
+            }
         }
     </script>
 </head>
@@ -109,7 +214,7 @@
                 <tbody>
                 <!--loop -->
                 <% for(let key in locals.reportData) {%>
-                <tr>
+                <tr class="reportRow" name="" value=" " data-href="<%= key %>">
                     <td><%= key %> </td>
                     <td><%= Object.keys(locals.reportData[key].report).length %></td>
                     <td><%= locals.overview.messageByReportId[key] %></td>
@@ -120,6 +225,93 @@
                 <% }%>
                 </tbody>
             </table>
+            <!-- Description based on flow start-->
+            <% for(let key in locals.reportData) {%>
+                <div id="<%= key %>" class="<%= key %> flowLevel">
+                    <p>flowWise Description of reportId <%= key %></p>
+                    <table class="flowDetails" style="background: white;    width: 96%;margin-left: 2%;">
+                        <thead>
+                            <tr>
+                                <th>FlowId</th>
+                                <th>Message Count</th>
+                                <th>Time Taken</th>
+                                <th>Pass / Fail</th>
+                                <th>pass % </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <% for (let flowKey in locals.reportData[key].report){ %>
+                        <tr onclick="flowRow(this)" class="flowRow" name="" value=" " data-href="<%= key+"_"+flowKey %>">
+                            <td><%= flowKey %></td>
+                            <td><%= locals.overview.messageByReportNFlowId[key+"_"+flowKey] %></td>
+                            <td><%= locals.overview.timeTakenByReportNFlowId[key+"_"+flowKey] %></td>
+                            <td><%= locals.overview.passedTestsByReportNFlowId[key+"_"+flowKey]+"/"+locals.overview.failedTestsByReportNFlowId[key+"_"+flowKey] %></td>
+                            <td><%= (locals.overview.passedTestsByReportNFlowId[key+"_"+flowKey]/(locals.overview.passedTestsByReportNFlowId[key+"_"+flowKey]+overview.failedTestsByReportNFlowId[key+"_"+flowKey])*100) %></td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } %>
+            <!-- Description based on flow end-->
+
+
+
+            <!-- Description based on messages start-->
+            <% for(let key in locals.reportData) {%>
+                <% for (let flowKey in locals.reportData[key].report){ %>
+                    <div id="<%= key+"_"+flowKey %>" class="<%= key %> messageLevel">
+                        <p>messageWise Description of <%= key+"_"+flowKey %></p>
+                        <table class="messageDetails" style="background: white;    width: 96%;margin-left: 2%;">
+                            <thead>
+                            <tr>
+                                <th>MessageId</th>
+                                <th>Query</th>
+                                <th>responseTime</th>
+                                <th>State</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for (let messageId in locals.reportData[key].report[flowKey]){ %>
+                            <tr onclick="messageRow(this)" class="flowRow" name="" value=" " data-href="<%= key+"_"+flowKey+"_"+messageId %>">
+                                <td><%= messageId %></td>
+                                <% if (locals.reportData[key].report[flowKey][messageId].info.clientMessageFormat){ %>
+                                <td><%= locals.reportData[key].report[flowKey][messageId].info.clientMessageFormat.type + ":- "+ locals.reportData[key].report[flowKey][messageId].info.clientMessageFormat.text %></td>
+                                <% } else { %>
+                                <td> Processing tests..</td>
+                                <% } %>
+                                <td><%= locals.reportData[key].report[flowKey][messageId].responseTime %></td>
+                                <td><%= locals.reportData[key].report[flowKey][messageId].state %></td>
+                            </tr>
+                            <div style="display: none" id="<%= key+"_"+flowKey+"_"+messageId %>">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Response</p>
+                                        <pre><%- JSON.stringify(locals.reportData[key].report[flowKey][messageId].info.response,null, ' ') %></pre>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>SavedResponse</p>
+                                        <pre><%= JSON.stringify(locals.reportData[key].report[flowKey][messageId].info.savedResponse , null, ' ') %></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } %>
+            <% } %>
+            <!-- Description based on messages end -->
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span id="close" >&times;</span>
+                    <div id="modalContent"></div>
+                </div>
+
+            </div>
             <% }else{ %>
             <pre> <%= locals.reportData %></pre>
             <% } %>
