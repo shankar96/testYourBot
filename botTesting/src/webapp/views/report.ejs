@@ -1,0 +1,131 @@
+<html>
+<head>
+    <title>
+        Welcome to View Report
+    </title>
+    <% include partials/header %>
+    <style>
+        #details {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #details td,
+        #details th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #details tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #details tr:hover {
+            background-color: #ddd;
+        }
+
+        #details th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+        .reportHead {
+            text-align: center;
+            font-size: x-large;
+            font-weight: bolder;
+            color: blue;
+        }
+
+    </style>
+    <script>
+        window.onload = function() {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                title: {
+                    text: "Pie Chart"
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: 240,
+                    yValueFormatString: "##0.00\"%\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: '<%= locals.overview.passedPercentage %>', label: "Passed"},
+                        {y: '<%= (100-locals.overview.passedPercentage) %>', label: "Failed"}
+                    ]
+                }]
+            });
+            chart.render();
+
+        }
+    </script>
+</head>
+
+<body>
+<% include partials/nav %>
+<div class="container-fluid">
+    <div class="col-md-12 reportHead">
+        Detailed Report
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="display: flex;align-items: center;">
+            <ul>
+
+                <li>Total Report:- <%= locals.overview.reportCount %></li>
+                <li>Total Flows:- <%= locals.overview.flowsCount %></li>
+                <li>Total tests:- <%= locals.overview.testsCount %></li>
+                <li>Total Passed Tests:- <%= locals.overview.passedTests %></li>
+                <li>Total Failed Tests:- <%= locals.overview.failedTests %></li>
+                <li>Total Messages:- <%= locals.overview.messagesCount %></li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        </div>
+    </div>
+
+
+    <!-- some graph-->
+    <!--Tables  -->
+    <div class="row">
+        <div class="col-md-12">
+            <% if(locals.success){ %>
+            <table id="details">
+                <thead>
+                <tr>
+                    <td>reportId </td>
+                    <td>Flows Count </td>
+                    <td>Message Count</td>
+                    <td>Time Taken</td>
+                    <td>pass/failed</td>
+                    <td>pass%</td>
+                </tr>
+                </thead>
+                <tbody>
+                <!--loop -->
+                <% for(let key in locals.reportData) {%>
+                <tr>
+                    <td><%= key %> </td>
+                    <td><%= Object.keys(locals.reportData[key].report).length %></td>
+                    <td><%= locals.overview.messageByReportId[key] %></td>
+                    <td><%= (locals.reportData[key].testCompletedTimestamp - locals.reportData[key].testStartedTimestamp) %></td>
+                    <td><%= locals.overview.passedTestsByReportId[key] %>/ <%= locals.overview.failedTestsByReportId[key] %></td>
+                    <td><%= (locals.overview.passedTestsByReportId[key]/(locals.overview.passedTestsByReportId[key]+locals.overview.failedTestsByReportId[key]))*100 %>%</td>
+                </tr>
+                <% }%>
+                </tbody>
+            </table>
+            <% }else{ %>
+            <pre> <%= locals.reportData %></pre>
+            <% } %>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

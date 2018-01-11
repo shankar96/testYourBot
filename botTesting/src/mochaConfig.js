@@ -3,10 +3,32 @@
  */
 "use strict";
 const log = require('./utils/logger');
+const testUtils = require('./utils/testUtils')
+const path = require('path');
+const reportFile = path.resolve(__dirname)+"/test_data/report.json"
 function notifyUsingSocket(socket,event,info) {
   if(socket){
     socket.emit(event,info);
   }
+}
+function saveReport(testResults,testStartedTimestamp,testCompletedTimestamp) {
+  let reportId = "report_"+new Date().getTime();
+  testUtils.readTestFile(reportFile)
+    .then((data)=>{
+      data = JSON.parse(data);
+      data[reportId]={
+        reportId,
+        testStartedTimestamp,
+        testCompletedTimestamp,
+        report:testResults
+      }
+      testUtils.writeTestFile(reportFile, JSON.stringify(data, null, '\t'))
+        .then((resp) => {
+          log.info("successfully saved test report with ",reportId)
+        }).catch((err) => {
+        log.info("Error in saving test report",err)
+      })
+    })
 }
 function pushResults(socket, flowId, test, testResults) {
   let responseTime = 0, messageId;
@@ -58,6 +80,7 @@ function fbTests(socket, flowId) {
     delete require.cache[ testDir ];
     mocha.addFile(testDir);
     let testResults = {};
+    let testStartedTimestamp = new Date().getTime();
     mocha.run(function(failures){
       process.on('exit', function () {
         process.exit(failures);  // exit with non-zero status if there were failures
@@ -80,7 +103,9 @@ function fbTests(socket, flowId) {
       test.info.err = err;
       pushResults(socket, flowId, test, testResults);
     }).on('end', function() {
-      notifyUsingSocket(socket,'testedFlow',testResults)
+      let testCompletedTimestamp = new Date().getTime();
+      notifyUsingSocket(socket,'testedFlow',testResults);
+      saveReport(testResults,testStartedTimestamp,testCompletedTimestamp);
     });
     resolve(true);
   })

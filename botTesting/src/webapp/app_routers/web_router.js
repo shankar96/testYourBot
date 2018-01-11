@@ -6,4 +6,6 @@ webRouter.get('/web',webController.web);
 webRouter.get('/home',webController.home);
 webRouter.get('/activeFlowInfo',webController.activeFlowInfo);
 webRouter.get('/docs',webController.docs)
+webRouter.get('/report',webController.report)
+
 module.exports = webRouter;

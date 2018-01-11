@@ -1,0 +1,1447 @@
+{
+	"1513867934893": {
+		"reportId": 1513867934893,
+		"testStartedTimestamp": 1513867886725,
+		"testCompletedTimestamp": 1513867934892,
+		"report": {
+			"transactionFlow1": {
+				"0": {
+					"title": "Testing Flow => <transactionFlow1, message {0}>",
+					"responseTime": 20573,
+					"timedOut": false,
+					"duration": 24,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "0",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "hi",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 50000,
+						"timeoutSet_": "timeout is set to 50 seconds because during initialization it takes time and we are also noting responsetime",
+						"responseTime": 20573,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						]
+					}
+				},
+				"1": {
+					"title": "Testing Flow => <transactionFlow1, message {1}>",
+					"responseTime": 21511,
+					"timedOut": false,
+					"duration": 6,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "1",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get transaction history",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 21511,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here are 4 transactions beginning with the most recent from 12/20/2017 to 12/21/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 90DH5JGWWC\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 4R316Z77LZ\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 2F3T3WZ6DW\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here are 4 transactions beginning with the most recent from 12/20/2017 to 12/21/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 90DH5JGWWC\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 4R316Z77LZ\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 2F3T3WZ6DW\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"2": {
+					"title": "Testing Flow => <transactionFlow1, message {2}>",
+					"responseTime": 5933,
+					"timedOut": false,
+					"duration": 15,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "2",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get details of LY8XNT9QQB",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 5933,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/20/2017 to 12/20/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/20/2017 to 12/20/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"undefined": {
+					"title": "processing Of testFile...",
+					"responseTime": 0,
+					"timedOut": false,
+					"duration": 4,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"info": {
+						"file": "/home/shankarkumarc/Documents/Alacriti/ella/botTesting/src/test_data/fbTestData.json",
+						"function": "checkFlowsFromFbTestData"
+					}
+				}
+			}
+		}
+	},
+	"report_1513869467561": {
+		"reportId": "report_1513869467561",
+		"testStartedTimestamp": 1513869356386,
+		"testCompletedTimestamp": 1513869467556,
+		"report": {
+			"TestAllFlowID": {
+				"undefined": {
+					"title": "processing Of testFile...",
+					"responseTime": 0,
+					"timedOut": false,
+					"duration": 17,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "TestAllFlowID",
+					"info": {
+						"file": "/home/shankarkumarc/Documents/Alacriti/ella/botTesting/src/test_data/fbTestData.json",
+						"function": "checkFlowsFromFbTestData"
+					}
+				}
+			},
+			"payBillFlow": {
+				"0": {
+					"title": "Testing Flow => <payBillFlow, message {0}>",
+					"responseTime": 20034,
+					"timedOut": false,
+					"duration": 16,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "payBillFlow",
+					"messageId": "0",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "pay my bill",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 50000,
+						"timeoutSet_": "timeout is set to 50 seconds because during initialization it takes time and we are also noting responsetime",
+						"responseTime": 20034,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Pick or enter the amount you would like to pay."
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "Current Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$2,562.00",
+															"payload": "current balance"
+														}
+													]
+												},
+												{
+													"title": "Min Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$54.00",
+															"payload": "min balance"
+														}
+													]
+												},
+												{
+													"title": "Current Statement Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$692.00",
+															"payload": "current statement balance"
+														}
+													]
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Pick or enter the amount you would like to pay."
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "Current Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$2,562.00",
+															"payload": "current balance"
+														}
+													]
+												},
+												{
+													"title": "Min Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$54.00",
+															"payload": "min balance"
+														}
+													]
+												},
+												{
+													"title": "Current Statement Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$692.00",
+															"payload": "current statement balance"
+														}
+													]
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"1": {
+					"title": "Testing Flow => <payBillFlow, message {1}>",
+					"responseTime": 6086,
+					"timedOut": false,
+					"duration": 6,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "payBillFlow",
+					"messageId": "1",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "current balance",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 6086,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "When would you like to pay?"
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "When would you like to pay?"
+								}
+							}
+						]
+					}
+				},
+				"2": {
+					"title": "Testing Flow => <payBillFlow, message {2}>",
+					"responseTime": 6683,
+					"timedOut": false,
+					"duration": 3,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "payBillFlow",
+					"messageId": "2",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "now",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 6683,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "button",
+											"text": "You are about to pay $2,562.00 using your funding account Ella2 chase (xxxxx0021) on 12/21/2017. Please note that you'll be charged an additional amount of $3.00 towards convenience fee. The total payment is $2,565.00. Shall I go ahead and confirm that?",
+											"buttons": [
+												{
+													"type": "postback",
+													"title": "Pay",
+													"payload": "pay"
+												},
+												{
+													"type": "postback",
+													"title": "Cancel",
+													"payload": "cancel"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "button",
+											"text": "You are about to pay $2,562.00 using your funding account Ella2 chase (xxxxx0021) on 12/19/2017. Please note that you'll be charged an additional amount of $3.00 towards convenience fee. The total payment is $2,565.00. Shall I go ahead and confirm that?",
+											"buttons": [
+												{
+													"type": "postback",
+													"title": "Pay",
+													"payload": "pay"
+												},
+												{
+													"type": "postback",
+													"title": "Cancel",
+													"payload": "cancel"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"3": {
+					"title": "Testing Flow => <payBillFlow, message {3}>",
+					"responseTime": 12011,
+					"timedOut": false,
+					"duration": 3,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "payBillFlow",
+					"messageId": "3",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "sure",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 12011,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Great, you just chatted your way through a payment! :) Your payment reference is XY4774GPH0. Can I help you with anything else today?"
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Great, you just chatted your way through a payment! :) Your payment reference is 57YD9T3XWL. Can I help you with anything else today?"
+								}
+							}
+						]
+					}
+				}
+			},
+			"transactionDetails": {
+				"0": {
+					"title": "Testing Flow => <transactionDetails, message {0}>",
+					"responseTime": 3647,
+					"timedOut": false,
+					"duration": 10,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionDetails",
+					"messageId": "0",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "hi",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 3647,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						]
+					}
+				},
+				"1": {
+					"title": "Testing Flow => <transactionDetails, message {1}>",
+					"responseTime": 22022,
+					"timedOut": false,
+					"duration": 4,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionDetails",
+					"messageId": "1",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get transaction details",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 22022,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here are 4 transactions beginning with the most recent from 12/20/2017 to 12/21/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: XY4774GPH0\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 90DH5JGWWC\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 4R316Z77LZ\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 2F3T3WZ6DW\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here are 4 transactions beginning with the most recent from 12/19/2017 to 12/19/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 57YD9T3XWL\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: DT0MXCQ5P4\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: D1GH0S0V4G\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"2": {
+					"title": "Testing Flow => <transactionDetails, message {2}>",
+					"responseTime": 5743,
+					"timedOut": false,
+					"duration": 7,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionDetails",
+					"messageId": "2",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get details of FDN5DY79QS",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 5743,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/19/2017 to 12/19/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/19/2017 to 12/19/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"3": {
+					"title": "Testing Flow => <transactionDetails, message {3}>",
+					"responseTime": 3222,
+					"timedOut": false,
+					"duration": 1,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionDetails",
+					"messageId": "3",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "thanks",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 3222,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "It's my pleasure to help."
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Anytime. That's what I'm here for."
+								}
+							}
+						]
+					}
+				}
+			},
+			"transactionFlow1": {
+				"0": {
+					"title": "Testing Flow => <transactionFlow1, message {0}>",
+					"responseTime": 3702,
+					"timedOut": false,
+					"duration": 3,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "0",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "hi",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 3702,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						]
+					}
+				},
+				"1": {
+					"title": "Testing Flow => <transactionFlow1, message {1}>",
+					"responseTime": 22098,
+					"timedOut": false,
+					"duration": 32,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "1",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get transaction history",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 22098,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here are 4 transactions beginning with the most recent from 12/20/2017 to 12/21/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: XY4774GPH0\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 90DH5JGWWC\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 4R316Z77LZ\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 2F3T3WZ6DW\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here are 4 transactions beginning with the most recent from 12/20/2017 to 12/21/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 90DH5JGWWC\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 4R316Z77LZ\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 2F3T3WZ6DW\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"2": {
+					"title": "Testing Flow => <transactionFlow1, message {2}>",
+					"responseTime": 5613,
+					"timedOut": false,
+					"duration": 10,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "2",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get details of LY8XNT9QQB",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 5613,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/20/2017 to 12/20/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/20/2017 to 12/20/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	"report_1515591803116": {
+		"reportId": "report_1515591803116",
+		"testStartedTimestamp": 1515591747153,
+		"testCompletedTimestamp": 1515591803111,
+		"report": {
+			"transactionFlow1": {
+				"0": {
+					"title": "Testing Flow => <transactionFlow1, message {0}>",
+					"responseTime": 19662,
+					"timedOut": false,
+					"duration": 17,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "0",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "hi",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 50000,
+						"timeoutSet_": "timeout is set to 50 seconds because during initialization it takes time and we are also noting responsetime",
+						"responseTime": 19662,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
+								}
+							}
+						]
+					}
+				},
+				"1": {
+					"title": "\"before each\" hook: before Each for \"Testing Flow => <transactionFlow1, message {1}>\"",
+					"responseTime": 0,
+					"timedOut": false,
+					"duration": 30014,
+					"state": "failed",
+					"flowId": "transactionFlow1",
+					"messageId": "1",
+					"info": {
+						"err": {}
+					},
+					"err": {}
+				},
+				"2": {
+					"title": "Testing Flow => <transactionFlow1, message {2}>",
+					"responseTime": 5817,
+					"timedOut": false,
+					"duration": 6,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"messageId": "2",
+					"info": {
+						"function": "checkEachMessage",
+						"clientMessageFormat": {
+							"type": "text",
+							"text": "get details of LY8XNT9QQB",
+							"senderId": "1586711078087024",
+							"pageId": "202153767012429",
+							"appId": "216838955439477"
+						},
+						"timeoutSet": 30000,
+						"timeoutSet_": "bot may respond late so at max timeout 30 second and we are also noting responsetime",
+						"responseTime": 5817,
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "is 1 transaction 12/20/2017 12/20/2017"
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						],
+						"savedResponse": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/20/2017 to 12/20/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					}
+				},
+				"undefined": {
+					"title": "processing Of testFile...",
+					"responseTime": 0,
+					"timedOut": false,
+					"duration": 3,
+					"state": "passed",
+					"speed": "fast",
+					"flowId": "transactionFlow1",
+					"info": {
+						"file": "/home/shankarkumarc/Documents/Alacriti/ella/botTesting/src/test_data/fbTestData.json",
+						"function": "checkFlowsFromFbTestData"
+					}
+				}
+			}
+		}
+	}
+}

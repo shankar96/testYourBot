@@ -1,13 +1,151 @@
 {
 	"testData": {
 		"flows": {
-			"flow_1513768580988": {
-				"flowId": "flow_1513768580988",
-				"createdTime": "Date:-Wed Dec 20 2017 16:46:20 GMT+0530 (IST)  Timestamp:- 1513768580988",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "2",
-				"appId": "2",
+			"payBillFlow": {
+				"flowId": "payBillFlow",
+				"createdTime": "Date:-Tue Dec 19 2017 13:55:22 GMT+0530 (IST)  Timestamp:- 1513671922624",
+				"description": "pay bill flow ",
+				"senderId": "1586711078087024",
+				"pageId": "202153767012429",
+				"appId": "216838955439477",
+				"flow": [
+					{
+						"query": {
+							"type": "text",
+							"text": "pay my bill"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Pick or enter the amount you would like to pay."
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "Current Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$2,562.00",
+															"payload": "current balance"
+														}
+													]
+												},
+												{
+													"title": "Min Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$54.00",
+															"payload": "min balance"
+														}
+													]
+												},
+												{
+													"title": "Current Statement Balance",
+													"buttons": [
+														{
+															"type": "postback",
+															"title": "$692.00",
+															"payload": "current statement balance"
+														}
+													]
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "current balance"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "When would you like to pay?"
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "now"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "button",
+											"text": "You are about to pay $2,562.00 using your funding account Ella2 chase (xxxxx0021) on 12/19/2017. Please note that you'll be charged an additional amount of $3.00 towards convenience fee. The total payment is $2,565.00. Shall I go ahead and confirm that?",
+											"buttons": [
+												{
+													"type": "postback",
+													"title": "Pay",
+													"payload": "pay"
+												},
+												{
+													"type": "postback",
+													"title": "Cancel",
+													"payload": "cancel"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "sure"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Great, you just chatted your way through a payment! :) Your payment reference is 57YD9T3XWL. Can I help you with anything else today?"
+								}
+							}
+						]
+					}
+				],
+				"savedTime": "Date:-Tue Dec 19 2017 13:56:47 GMT+0530 (IST)  Timestamp:- 1513672007232"
+			},
+			"transactionDetails": {
+				"flowId": "transactionDetails",
+				"createdTime": "Date:-Tue Dec 19 2017 15:08:40 GMT+0530 (IST)  Timestamp:- 1513676320667",
+				"description": "transaction flow",
+				"senderId": "1586711078087024",
+				"pageId": "202153767012429",
+				"appId": "216838955439477",
 				"flow": [
 					{
 						"query": {
@@ -17,10 +155,30 @@
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": ""
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
 								}
 							}
 						]
@@ -28,15 +186,54 @@
 					{
 						"query": {
 							"type": "text",
-							"text": "how are you"
+							"text": "get transaction details"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "Wonderful as always. Thanks for asking."
+									"text": "Here are 4 transactions beginning with the most recent from 12/19/2017 to 12/19/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 57YD9T3XWL\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: DT0MXCQ5P4\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: D1GH0S0V4G\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
 								}
 							}
 						]
@@ -44,208 +241,34 @@
 					{
 						"query": {
 							"type": "text",
-							"text": "great"
+							"text": "get details of FDN5DY79QS"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "Terrific!"
+									"text": "Here is 1 transaction beginning with the most recent from 12/19/2017 to 12/19/2017 "
 								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "bye"
-						},
-						"response": [
+							},
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "Till next time!"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Wed Dec 20 2017 16:46:39 GMT+0530 (IST)  Timestamp:- 1513768599896"
-			},
-			"flow_1513842768266": {
-				"flowId": "flow_1513842768266",
-				"createdTime": "Date:-Thu Dec 21 2017 13:22:48 GMT+0530 (IST)  Timestamp:- 1513842768267",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "omg"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Say that again?"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Thu Dec 21 2017 13:22:58 GMT+0530 (IST)  Timestamp:- 1513842778254"
-			},
-			"flow1": {
-				"flowId": "flow1",
-				"createdTime": "Date:-Wed Dec 20 2017 16:46:20 GMT+0530 (IST)  Timestamp:- 1513768580988",
-				"description": "flow 1 description",
-				"senderId": "4345",
-				"pageId": "234",
-				"appId": "2",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hi"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": ""
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "how are you"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Wonderful as always. Thanks for asking."
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "great"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Terrific!"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "bye"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Till next time!"
-								}
-							}
-						]
-					}
-				],
-				"savedTime": "Date:-Thu Dec 21 2017 13:28:31 GMT+0530 (IST)  Timestamp:- 1513843111478"
-			},
-			"flow_1513844415987": {
-				"flowId": "flow_1513844415987",
-				"createdTime": "Date:-Thu Dec 21 2017 13:50:15 GMT+0530 (IST)  Timestamp:- 1513844415987",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
-				"flow": [
-					{
-						"query": {
-							"type": "text",
-							"text": "hi"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": ""
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "omg"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Sorry, what was that?"
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "how are you"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Wonderful as always. Thanks for asking."
-								}
-							}
-						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "great"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Great!"
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/19/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: FDN5DY79QS\nStatus: Scheduled"
+												}
+											]
+										}
+									}
 								}
 							}
 						]
@@ -258,40 +281,24 @@
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
 									"text": "Anytime. That's what I'm here for."
 								}
 							}
 						]
-					},
-					{
-						"query": {
-							"type": "text",
-							"text": "bye"
-						},
-						"response": [
-							{
-								"recipient": {
-									"id": "1"
-								},
-								"message": {
-									"text": "Bye."
-								}
-							}
-						]
 					}
 				],
-				"savedTime": "Date:-Thu Dec 21 2017 13:51:00 GMT+0530 (IST)  Timestamp:- 1513844460244"
+				"savedTime": "Date:-Tue Dec 19 2017 15:24:22 GMT+0530 (IST)  Timestamp:- 1513677262723"
 			},
-			"flow_1513858691235": {
-				"flowId": "flow_1513858691235",
-				"createdTime": "Date:-Thu Dec 21 2017 17:48:11 GMT+0530 (IST)  Timestamp:- 1513858691235",
-				"description": "Empty Description...",
-				"senderId": "1",
-				"pageId": "1",
-				"appId": "1",
+			"transactionFlow1": {
+				"flowId": "transactionFlow1",
+				"createdTime": "Date:-Thu Dec 21 2017 19:30:20 GMT+0530 (IST)  Timestamp:- 1513864820310",
+				"description": "Get transactions details and get details by payment status type",
+				"senderId": "1586711078087024",
+				"pageId": "202153767012429",
+				"appId": "216838955439477",
 				"flow": [
 					{
 						"query": {
@@ -301,10 +308,30 @@
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "Error in Processing Your Request :- hi"
+									"text": "Hello Mahendra, What can I help you with?",
+									"quick_replies": [
+										{
+											"content_type": "text",
+											"title": "Pay",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "pay bill"
+										},
+										{
+											"content_type": "text",
+											"title": "Get Bill Details",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get bill details"
+										},
+										{
+											"content_type": "text",
+											"title": "Transaction History",
+											"image_url": "https://www.facebook.com/images/emoji.php/v9/za9/1/32/1f535.png",
+											"payload": "get transaction history"
+										}
+									]
 								}
 							}
 						]
@@ -312,21 +339,95 @@
 					{
 						"query": {
 							"type": "text",
-							"text": "hi"
+							"text": "get transaction history"
 						},
 						"response": [
 							{
 								"recipient": {
-									"id": "1"
+									"id": "1586711078087024"
 								},
 								"message": {
-									"text": "Error in Processing Your Request :- hi"
+									"text": "Here are 4 transactions beginning with the most recent from 12/20/2017 to 12/21/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "list",
+											"top_element_style": "compact",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/21/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 90DH5JGWWC\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 4R316Z77LZ\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: 2F3T3WZ6DW\nStatus: Scheduled"
+												},
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											],
+											"buttons": [
+												{
+													"title": "View More",
+													"type": "postback",
+													"payload": "more"
+												}
+											]
+										}
+									}
+								}
+							}
+						]
+					},
+					{
+						"query": {
+							"type": "text",
+							"text": "get details of LY8XNT9QQB"
+						},
+						"response": [
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"text": "Here is 1 transaction beginning with the most recent from 12/20/2017 to 12/20/2017 "
+								}
+							},
+							{
+								"recipient": {
+									"id": "1586711078087024"
+								},
+								"message": {
+									"attachment": {
+										"type": "template",
+										"payload": {
+											"template_type": "generic",
+											"elements": [
+												{
+													"title": "$2,565.00 paid on 12/20/2017 ",
+													"subtitle": "Using ella2+chase ending 0021\nRef#: LY8XNT9QQB\nStatus: Scheduled"
+												}
+											]
+										}
+									}
 								}
 							}
 						]
 					}
 				],
-				"savedTime": "Date:-Thu Dec 21 2017 17:48:24 GMT+0530 (IST)  Timestamp:- 1513858704203"
+				"savedTime": "Date:-Thu Dec 21 2017 19:34:39 GMT+0530 (IST)  Timestamp:- 1513865079000"
 			}
 		}
 	},
