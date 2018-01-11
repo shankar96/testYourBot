@@ -3,8 +3,7 @@ var log = require('../utils/logger')
 var channelHandler = require('../channel_helpers/channel_handler')
 var nlpHandler = require('../nlp_helpers/nlp_handler')
 function processMessage(valueContext) {
-    log.info("in processMessage")
-    // console.log(valueContext)
+    log.info("in processMessage",valueContext)
     // if (valueContext.messageData.query == 'multiple_message') {
     //     valueContext.messageData.response=[
     //         {

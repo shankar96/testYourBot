@@ -14,7 +14,7 @@ var cacheDataHelper = {
 var fbHelper = require('../../channel_helpers/fb_helper')
 function verifyFbWebhookSignature(req, res, next) {
 	res.send("OK");
-	log.info('Respond back with 200 status and START of verifyFbWebhookSignature');
+	log.info('Respond back with 200 status and START of verifyFbWebhookSignature',req.body,req.url);
 	let xHubSignature = req.headers['x-hub-signature'];
 	let appId;
 	try {
@@ -36,6 +36,7 @@ function verifyFbWebhookSignature(req, res, next) {
 			log.error({
 				err: err
 			}, 'Error in validatingFbWebhookSignature', err);
+			next();
 		});
 	}
 

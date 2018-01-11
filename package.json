@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "botTesting/node_modules/.bin/mocha botTesting/src/test.js",
-    "start": "node src/webapp/app.js"
+    "start": "node src/webapp/app.js",
+    "logs": "tailf logs/ella.log | ./node_modules/bunyan/bin/bunyan"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "bunyan": "^1.8.12",
+    "bunyan-elasticsearch": "^1.0.1",
     "cluster": "^0.7.7",
     "express": "^4.16.2",
     "request": "^2.83.0"
