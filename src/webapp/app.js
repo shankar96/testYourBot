@@ -21,13 +21,15 @@ if (cluster.isMaster) {
         console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
         console.log('Starting a new worker');
         cluster.fork();
-    });
+    }); 
 } else {
+    // console.log(process.env)
     var REST_PORT = (process.env.PORT || 5000)
     app.listen(REST_PORT, function () {
         log.info("server started on ", REST_PORT);
     })
-    // app.use(bodyParser.json())
+    
+    // app.use(bodyParser.json()) lo
     var appRouters = require('./app_router');
     appRouters(app);
 }

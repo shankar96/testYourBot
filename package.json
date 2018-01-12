@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "botTesting/node_modules/.bin/mocha botTesting/src/test.js",
-    "start": "node src/webapp/app.js",
+    "start": "NODE_PATH=. ELLA_CONF_DIR=conf/ node src/webapp/app.js",
     "logs": "tailf logs/ella.log | ./node_modules/bunyan/bin/bunyan"
   },
   "keywords": [],
@@ -19,5 +19,8 @@
     "cluster": "^0.7.7",
     "express": "^4.16.2",
     "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
   }
 }
